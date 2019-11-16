@@ -1,5 +1,6 @@
 #include "includes.h"
 #include "Matrix.h"
+#include <iostream>
 #include <vector>
 #include <iomanip>
 

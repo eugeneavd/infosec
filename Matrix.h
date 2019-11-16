@@ -1,4 +1,5 @@
 #include "IntModuloP.h"
+#include <iostream>
 #include <vector>
 #ifndef INFOSEC_MATRIX_H
 #define INFOSEC_MATRIX_H

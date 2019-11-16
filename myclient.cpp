@@ -1,103 +1,74 @@
 #include "includes.h"
-
-using namespace std;
-
-void print(vector<vector<type>> A) {		//function to print two-dimensional vectors
-    int n = A.size();
-	int m = A[0].size();
-    for (int i=0; i<n; i++) {
-        for (int j=0; j<m; j++) {
-            cout << A[i][j] << "\t";
-        }
-        cout << "\n";
-    }
-}
+#include "Matrix.h"
 
 void func(int sockfd)
 {
-	int buff[MAX];
-	int n = 0;
-	int size[4];
-	vector<vector<type>> C;
+    int buff[MAX];
+    int n = 0;
+    int size[4];
 
-	printf("Enter matrix dimensions:\n");
-	while(n != 4)
-	{
-		bzero(buff, MAX);
-		
-		// buff[0] = getchar();
-		scanf("%d", &buff[0]);
-		if (buff[0] != ' ')
-		{
-			write(sockfd, buff, sizeof(buff));
-			size[n] = buff[0];
-			n++;
-		}
-	}
+    printf("Enter matrix dimensions:\n");
+    while(n != 4)
+    {
+        bzero(buff, MAX);
+        std::cin >> buff[0];
+        if (buff[0] != ' ') {
+            write(sockfd, buff, sizeof(buff));
+            size[n] = buff[0];
+            n++;
+        }
+    }
 
-	printf("Enter first matrix:\n");
-	for(int j = 0; j < size[0]; j++){
-		for(int i = 0; i < size[1]; i++){
-			cin >> buff[i];
-		}
-		write(sockfd, buff, sizeof(buff));
-	}
+    printf("Enter first matrix:\n");
+    Matrix A {size[0], size[1]};
+    std:: cin >> A;
+    A.Send(sockfd);
 
-	printf("Enter second matrix:\n");
-	for(int j = 0; j < size[2]; j++){
-		for(int i = 0; i < size[3]; i++){
-			cin >> buff[i];
-		}
-		write(sockfd, buff, sizeof(buff));
-	}
+    Matrix B {size[2], size[3]};
+    printf("Enter second matrix:\n");
+    std::cin >> B;
+    B.Send(sockfd);
 
-	printf("Product:\n");
-	for (int count = 0; count < size[0]; count++)		//accept matrix product
-	{
-		vector<type> temp(size[1]);
-		bzero(buff, MAX);
-		read(sockfd, buff, sizeof(buff));
-		for (int i = 0; i < size[3]; i++)
-		{
-			temp[i] = buff[i];
-		}
-		C.push_back(temp);
-	}
-	print(C);
+    //Matrix C{size[0], size[3], sockfd};
+    Matrix C{size[0], size[3]};
+    C = Mult(A, B);
+    std::cout << size[0] << ' ' << size[3] << std::endl;
+
+    printf("Product:\n");
+    std::cout << B;
 }
 
 int main()
 {
-	int sockfd, connfd;
-	struct sockaddr_in servaddr, cli;
+    int sockfd, connfd;
+    struct sockaddr_in servaddr, cli;
 
-	// socket create and varification
-	sockfd = socket(AF_INET, SOCK_STREAM, 0);
-	if (sockfd == -1) {
-		printf("socket creation failed...\n");
-		exit(0);
-	}
-	else
-		printf("Socket successfully created..\n");
-	bzero(&servaddr, sizeof(servaddr));
+    // socket create and varification
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd == -1) {
+        printf("socket creation failed...\n");
+        exit(0);
+    }
+    else
+        printf("Socket successfully created..\n");
+    bzero(&servaddr, sizeof(servaddr));
 
-	// assign IP, PORT
-	servaddr.sin_family = AF_INET;
-	servaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
-	servaddr.sin_port = htons(PORT);
+    // assign IP, PORT
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    servaddr.sin_port = htons(PORT);
 
-	// connect the client socket to server socket
-	if (connect(sockfd, (SA*)&servaddr, sizeof(servaddr)) != 0) {
-		printf("connection with the server failed...\n");
-		exit(0);
-	}
-	else
-		printf("connected to the server..\n");
+    // connect the client socket to server socket
+    if (connect(sockfd, (SA*)&servaddr, sizeof(servaddr)) != 0) {
+        printf("connection with the server failed...\n");
+        exit(0);
+    }
+    else
+        printf("connected to the server..\n");
 
-	// function for chat
-	func(sockfd);
+    // function for chat
+    func(sockfd);
 
-	// close the socket
-	close(sockfd);
+    // close the socket
+    close(sockfd);
 }
-

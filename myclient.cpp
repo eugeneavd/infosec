@@ -29,13 +29,10 @@ void func(int sockfd)
     std::cin >> B;
     B.Send(sockfd);
 
-    //Matrix C{size[0], size[3], sockfd};
-    Matrix C{size[0], size[3]};
-    C = Mult(A, B);
-    std::cout << size[0] << ' ' << size[3] << std::endl;
+   Matrix C{size[0], size[3], sockfd};
 
     printf("Product:\n");
-    std::cout << B;
+    std::cout << C;
 }
 
 int main()

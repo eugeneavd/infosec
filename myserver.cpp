@@ -6,7 +6,6 @@
 
 void func(int sockfd){
     int buff[MAX];
-    int n;
     int size[4];
     Matrix A, B, C;
 
@@ -16,7 +15,6 @@ void func(int sockfd){
         read(sockfd, buff, sizeof(buff));
         size[i] = buff[0];
     }
-
     if (size[1] != size[2])
     {
         printf("Dimensions are incompatible\n");
@@ -24,8 +22,8 @@ void func(int sockfd){
 
     else
     {
-        Matrix A{size[0], size[1], sockfd};
-        Matrix B{size[2], size[3], sockfd};
+        A = {size[0], size[1], sockfd};
+        B = {size[2], size[3], sockfd};
     }
     C = Mult(A, B);
     C.Send(sockfd);

@@ -53,20 +53,20 @@ Matrix Mult(const Matrix &A, const Matrix &B) {
     return C;
 }
 
-Matrix::Matrix(int m, int n, int sockfd) : Matrix(m, n) {
+Matrix::Matrix(int m, int n, int sockfd) : Matrix(m, n){
     int buff[MAX];
     for (int i = 0; i < m; i++) {
         bzero(buff, MAX);
         read(sockfd, buff, sizeof(buff));
-        for (int j = 0; j < n; j++)
-            mat[i][j] = IntModuloP (buff[j]);
+        for (int j = 0; j < n; j++) {
+            mat[i][j] = IntModuloP(buff[j]);
+        }
     }
 }
 
 void Matrix::Send(int sockfd) const {
     int buff[MAX];
     for(int i = 0; i < m; i++) {
-        bzero(buff, MAX);
         for (int j = 0; j < n; j++) {
             buff[j] = mat[i][j];
         }

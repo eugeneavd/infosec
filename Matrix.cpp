@@ -46,10 +46,12 @@ Matrix Mult(const Matrix &A, const Matrix &B) {
     int l = A.n; // assuming A.n = B.m
     int n = B.n;
     Matrix C(m, n);
+    Matrix Bt = B;
+    Bt.Transpose();
     for (int i=0; i < m; i++)
         for (int j=0; j < n; j++)
             for (int k=0; k < l; k++)
-                C.mat[i][j] += A.mat[i][k] * B.mat[k][j];
+                C.mat[i][j] += A.mat[i][k] * Bt.mat[j][k];
     return C;
 }
 
@@ -72,4 +74,12 @@ void Matrix::Send(int sockfd) const {
         }
         write(sockfd, buff, sizeof(buff));
     }
+}
+
+void Matrix::Transpose() {
+    const auto temp = mat;
+    resize(n, m);
+    for (int i=0; i < m; i++)
+        for (int j=0; j < n; j++)
+            mat[i][j] = temp[j][i];
 }

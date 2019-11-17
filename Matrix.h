@@ -1,6 +1,7 @@
 #include "IntModuloP.h"
 #include <iostream>
 #include <vector>
+#include <iostream>
 #ifndef INFOSEC_MATRIX_H
 #define INFOSEC_MATRIX_H
 
@@ -16,6 +17,7 @@ public:
     friend std::istream& operator>>(std::istream& in, Matrix& A);
     friend std::ostream& operator<<(std::ostream& out, const Matrix& A);
     void resize(int m, int n);
+    void Transpose();
 private:
     std::vector<std::vector<IntModuloP>> mat;
     int m=0, n=0;

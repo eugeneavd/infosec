@@ -1,0 +1,4 @@
+/home/evgeny/infosec/project/build/CMakeFiles/rebuild_cache.dir
+/home/evgeny/infosec/project/build/CMakeFiles/edit_cache.dir
+/home/evgeny/infosec/project/build/CMakeFiles/myclient.dir
+/home/evgeny/infosec/project/build/CMakeFiles/myserver.dir

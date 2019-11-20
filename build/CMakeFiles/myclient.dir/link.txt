@@ -1,1 +1,0 @@
-/usr/bin/c++     CMakeFiles/myclient.dir/myclient.cpp.o CMakeFiles/myclient.dir/Matrix.cpp.o  -o myclient 

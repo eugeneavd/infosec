@@ -3,8 +3,13 @@ project(infosec)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(myclient myclient.cpp Matrix.cpp IntModuloP.cpp)
-add_executable(myserver myserver.cpp Matrix.cpp IntModuloP.cpp)
+add_library(matrix Matrix.cpp Matrix.h)
+add_library(intmodp IntModuloP.cpp IntModuloP.h)
+
+add_executable(myclient myclient.cpp)
+add_executable(myserver myserver.cpp)
 add_executable(dg_test tests/dg_test.cpp DegreeTable.cpp)
 add_executable(intmodp_test tests/intmodp_test.cpp IntModuloP.cpp)
 
+target_link_libraries(myserver matrix intmodp)
+target_link_libraries(myclient matrix intmodp)

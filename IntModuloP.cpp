@@ -50,6 +50,16 @@ IntModuloP operator-(const IntModuloP& x, const IntModuloP& y) {
     return IntModuloP(x.mod, x.value - y.value);
 }
 
+IntModuloP operator^(const IntModuloP &x, int n) {
+    if (n < 0) throw std::invalid_argument("Negative degree");
+    if ((n % 2) != 0) {
+        return x * x^(n-1);
+    } else {
+        IntModuloP temp = x^(n/2);
+        return temp * temp;
+    }
+}
+
 IntModuloP::operator int() const {
     return value;
 }

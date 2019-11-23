@@ -18,6 +18,7 @@ public:
     friend std::ostream& operator<<(std::ostream& out, const Matrix& A);
     void resize(int m, int n);
     void Transpose();
+    Matrix operator*(const IntModuloP a) const;
 private:
     std::vector<std::vector<IntModuloP>> mat;
     int m=0, n=0;

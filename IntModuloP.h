@@ -24,6 +24,7 @@ IntModuloP operator+(const IntModuloP& x, const IntModuloP& y);
 IntModuloP operator-(const IntModuloP& x, const IntModuloP& y);
 IntModuloP operator*(const IntModuloP& x, const IntModuloP& y);
 IntModuloP operator/(const IntModuloP& x, const IntModuloP& y);
+IntModuloP operator^(const IntModuloP& x, int n);
 
 std::ostream& operator<<(std::ostream& out, const IntModuloP& x);
 std::istream& operator>>(std::istream& in, IntModuloP& x);

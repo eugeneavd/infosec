@@ -84,3 +84,10 @@ void Matrix::Transpose() {
             mat[i][j] = temp[j][i];
 }
 
+Matrix Matrix::operator*(const IntModuloP a) const {
+    Matrix aA(m, n, mod);
+    for (int i = 0; i < m; i++)
+        for (int j = 0; j < n; j++)
+            aA(i, j) = a * mat[i][j];
+}
+

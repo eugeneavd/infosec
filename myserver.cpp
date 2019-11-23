@@ -3,12 +3,14 @@
 #include <iostream>
 #include <vector>
 #include <iomanip>
+#define PRIME 73
 
 
 void func(int sockfd){
     int buff[MAX];
     int size[4];
-    Matrix A, B, C;
+    Matrix* A;
+    Matrix* B;
 
     for (int i = 0; i < 4; i++)		//accept matrix sizes
     {
@@ -23,11 +25,13 @@ void func(int sockfd){
 
     else
     {
-        A = {size[0], size[1], sockfd};
-        B = {size[2], size[3], sockfd};
+        A = new Matrix(size[0], size[1], PRIME, sockfd);
+        B = new Matrix(size[2], size[3], PRIME, sockfd);
     }
-    C = Mult(A, B);
+    Matrix C = Mult(*A, *B);
     C.Send(sockfd);
+    delete(A);
+    delete(B);
 }
 
 int main()

@@ -9,8 +9,8 @@
 class Matrix {
 public:
     Matrix() = default;
-    Matrix(int m, int n);
-    Matrix(int m, int n, int sockfd);
+    Matrix(int m, int n, unsigned int prime);
+    Matrix(int m, int n, unsigned int prime, int sockfd);
     void Send(int sockfd) const;
     IntModuloP& operator()(int m, int n);
     friend Matrix Mult(const Matrix& A, const Matrix& B);
@@ -21,6 +21,7 @@ public:
 private:
     std::vector<std::vector<IntModuloP>> mat;
     int m=0, n=0;
+    const unsigned int mod;
 };
 
 std::ostream& operator<<(std::ostream& out, const Matrix& A);

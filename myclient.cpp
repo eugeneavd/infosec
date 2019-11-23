@@ -1,5 +1,6 @@
 #include "includes.h"
 #include "Matrix.h"
+#define PRIME 73
 
 void func(int sockfd)
 {
@@ -26,16 +27,16 @@ void func(int sockfd)
     
 
     std::cout << "Enter first matrix:" << std::endl;
-    Matrix A {size[0], size[1]};
+    Matrix A {size[0], size[1], PRIME};
     std:: cin >> A;
     A.Send(sockfd);
 
-    Matrix B {size[2], size[3]};
+    Matrix B {size[2], size[3], PRIME};
     std::cout << "Enter second matrix:" << std::endl;
     std::cin >> B;
     B.Send(sockfd);
 
-    Matrix C{size[0], size[3], sockfd};
+    Matrix C{size[0], size[3], PRIME, sockfd};
 
     std::cout << "Product" << std::endl;
     std::cout << C;

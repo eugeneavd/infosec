@@ -27,13 +27,13 @@ std::istream& operator>>(std::istream& in, Matrix& A) {
 }
 
 void Matrix::resize(int m, int n) {
-    mat = std::vector<std::vector<IntModuloP>>  (m, std::vector<IntModuloP>(n, 0));
+    mat = std::vector<std::vector<IntModuloP>>  (m, std::vector<IntModuloP>(n, IntModuloP(0, mod)));
     this->m = m;
     this->n = n;
 }
 
 
-Matrix::Matrix(int m, int n) : Matrix() {
+Matrix::Matrix(int m, int n, unsigned int mod) : mod(mod) {
     resize(m, n);
 }
 
@@ -45,23 +45,23 @@ Matrix Mult(const Matrix &A, const Matrix &B) {
     int m = A.m;
     int l = A.n; // assuming A.n = B.m
     int n = B.n;
-    Matrix C(m, n);
+    Matrix C(m, n, A.mod); // A.mod == B.mod
     Matrix Bt = B;
     Bt.Transpose();
     for (int i=0; i < m; i++)
         for (int j=0; j < n; j++)
             for (int k=0; k < l; k++)
-                C.mat[i][j] += A.mat[i][k] * Bt.mat[j][k];
+                C.mat[i][j] = C.mat[i][j] + A.mat[i][k] * Bt.mat[j][k];
     return C;
 }
 
-Matrix::Matrix(int m, int n, int sockfd) : Matrix(m, n){
+Matrix::Matrix(int m, int n, unsigned int mod, int sockfd) : Matrix(m, n, mod){
     int buff[MAX];
     for (int i = 0; i < m; i++) {
         bzero(buff, MAX);
         read(sockfd, buff, sizeof(buff));
         for (int j = 0; j < n; j++) {
-            mat[i][j] = IntModuloP(buff[j]);
+            mat[i][j] = static_cast<IntModuloP> (IntModuloP(buff[j], mod));
         }
     }
 }
@@ -70,7 +70,7 @@ void Matrix::Send(int sockfd) const {
     int buff[MAX];
     for(int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
-            buff[j] = mat[i][j];
+            buff[j] = static_cast<int> (mat[i][j]);
         }
         write(sockfd, buff, sizeof(buff));
     }

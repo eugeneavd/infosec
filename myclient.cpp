@@ -7,7 +7,7 @@ void func(int sockfd)
     int n = 0;
     int size[4];
 
-    printf("Enter matrix dimensions:\n");
+    std::cout << "Enter matrix dimensions" << std::endl;
     while(n != 4)
     {
         bzero(buff, MAX);
@@ -19,20 +19,36 @@ void func(int sockfd)
         }
     }
 
-    printf("Enter first matrix:\n");
+    std::cout << "Enter first matrix:" << std::endl;
     Matrix A {size[0], size[1]};
     std:: cin >> A;
     A.Send(sockfd);
 
     Matrix B {size[2], size[3]};
-    printf("Enter second matrix:\n");
+    std::cout << "Enter second matrix:" << std::endl;
     std::cin >> B;
     B.Send(sockfd);
 
-   Matrix C{size[0], size[3], sockfd};
+    Matrix C{size[0], size[3], sockfd};
 
-    printf("Product:\n");
+    std::cout << "Product" << std::endl;
     std::cout << C;
+}
+
+void VerifySocket(int sockfd){
+    if (sockfd == -1)
+    {
+        std::cout << "socket creation failure" << std::endl;
+        throw std::runtime_error("socket creation failure");
+    }
+}
+
+void VerifyConnection(int sockfd, struct sockaddr_in servaddr){
+    if (connect(sockfd, (SA*)&servaddr, sizeof(servaddr)) != 0)
+    {
+        std::cout << "connection with server failed" << std::endl;
+        throw std::runtime_error("connection with server failed");
+    }
 }
 
 int main()
@@ -40,14 +56,16 @@ int main()
     int sockfd, connfd;
     struct sockaddr_in servaddr, cli;
 
-    // socket create and varification
-    sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    if (sockfd == -1) {
-        printf("socket creation failed...\n");
-        exit(0);
+    try {
+        // socket create and verification
+        sockfd = socket(AF_INET, SOCK_STREAM, 0);
+        VerifySocket(sockfd);
     }
-    else
-        printf("Socket successfully created..\n");
+    catch (std::exception& ex){
+        std::cout << "Error: " << ex.what();
+    }
+
+    std::cout << "Socket successfully created" << std::endl;
     bzero(&servaddr, sizeof(servaddr));
 
     // assign IP, PORT
@@ -56,12 +74,21 @@ int main()
     servaddr.sin_port = htons(PORT);
 
     // connect the client socket to server socket
-    if (connect(sockfd, (SA*)&servaddr, sizeof(servaddr)) != 0) {
-        printf("connection with the server failed...\n");
-        exit(0);
+    // if (connect(sockfd, (SA*)&servaddr, sizeof(servaddr)) != 0) {
+    //     std::cout << "Connection with server failed" << std::endl;
+    //     // exit(0);
+    //     // throw "connection failure";
+    //     throw std::exception();
+    // }
+    // else
+    try {
+        VerifyConnection(sockfd, servaddr);
     }
-    else
-        printf("connected to the server..\n");
+    catch (std::exception& ex){
+        std::cout << "Error: " << ex.what();
+    }
+    
+    std::cout << "Connection established" << std::endl;
 
     // function for chat
     func(sockfd);

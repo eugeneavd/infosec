@@ -1,1 +1,55 @@
 #include "IntModuloP.h"
+
+int gcd(int a, int b, int & x, int & y) {
+    if (a == 0) {
+        x = 0; y = 1;
+        return b;
+    }
+    int x1, y1;
+    int d = gcd (b%a, a, x1, y1);
+    x = y1 - (b / a) * x1;
+    y = x1;
+    return d;
+}
+
+IntModuloP operator/(const IntModuloP &x, const IntModuloP &y) {
+    int d, p, q;
+    d = gcd(y.value, static_cast<int> (y.mod), p, q);
+    while (p < 0) p += y.mod;
+    return x * IntModuloP(y.mod, p);
+}
+
+IntModuloP operator*(const IntModuloP &x, const IntModuloP &y) {
+    if (x.mod != y.mod) throw std::invalid_argument("Moduli are't equal");
+    return IntModuloP(x.mod, x.value * y.value);
+}
+
+std::ostream& operator<<(std::ostream& out, const IntModuloP& x) {
+    out << x.value;
+    return out;
+}
+
+std::istream& operator>>(std::istream& in, IntModuloP& x) {
+    in >> x.value;
+    return in;
+}
+
+IntModuloP operator+(const IntModuloP& x, const IntModuloP& y) {
+    if (x.mod != y.mod) throw std::invalid_argument("Moduli are't equal");
+    return IntModuloP(x.mod, x.value + y.value);
+}
+
+IntModuloP::IntModuloP(int mod, int value) : mod(mod), value(value) {
+    if (mod <= 0 ) throw std::invalid_argument("Modulus must be positive");
+    while (value < 0) value += mod;
+    this->value = value % mod;
+}
+
+IntModuloP operator-(const IntModuloP& x, const IntModuloP& y) {
+    if (x.mod != y.mod) throw std::invalid_argument("Moduli are't equal");
+    return IntModuloP(x.mod, x.value - y.value);
+}
+
+IntModuloP::operator int() const {
+    return value;
+}

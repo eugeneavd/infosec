@@ -9,8 +9,6 @@
 void func(int sockfd){
     int buff[MAX];
     int size[4];
-    Matrix* A;
-    Matrix* B;
 
     for (int i = 0; i < 4; i++)		//accept matrix sizes
     {
@@ -18,20 +16,14 @@ void func(int sockfd){
         read(sockfd, buff, sizeof(buff));
         size[i] = buff[0];
     }
-    if (size[1] != size[2])
-    {
+    if (size[1] != size[2]) {
         printf("Dimensions are incompatible\n");
+        return;
     }
-
-    else
-    {
-        A = new Matrix(size[0], size[1], PRIME, sockfd);
-        B = new Matrix(size[2], size[3], PRIME, sockfd);
-    }
-    Matrix C = Mult(*A, *B);
+    auto A = Matrix(size[0], size[1], PRIME, sockfd);
+    auto B = Matrix(size[2], size[3], PRIME, sockfd);
+    auto C = Mult(A, B);
     C.Send(sockfd);
-    delete(A);
-    delete(B);
 }
 
 int main()

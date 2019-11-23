@@ -22,7 +22,7 @@ void func(int sockfd)
 
     printf("Enter first matrix:\n");
     Matrix A {size[0], size[1], PRIME};
-    std:: cin >> A;
+    std::cin >> A;
     A.Send(sockfd);
 
     Matrix B {size[2], size[3], PRIME};
@@ -30,7 +30,7 @@ void func(int sockfd)
     std::cin >> B;
     B.Send(sockfd);
 
-   Matrix C{size[0], size[3], PRIME, sockfd};
+    Matrix C{size[0], size[3], PRIME, sockfd};
 
     printf("Product:\n");
     std::cout << C;

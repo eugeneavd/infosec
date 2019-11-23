@@ -19,6 +19,12 @@ void func(int sockfd)
         }
     }
 
+    if (size[1] != size[2])
+    {
+        throw std::runtime_error("matrix dimensions incompatible");
+    }
+    
+
     std::cout << "Enter first matrix:" << std::endl;
     Matrix A {size[0], size[1]};
     std:: cin >> A;
@@ -35,22 +41,6 @@ void func(int sockfd)
     std::cout << C;
 }
 
-void VerifySocket(int sockfd){
-    if (sockfd == -1)
-    {
-        std::cout << "socket creation failure" << std::endl;
-        throw std::runtime_error("socket creation failure");
-    }
-}
-
-void VerifyConnection(int sockfd, struct sockaddr_in servaddr){
-    if (connect(sockfd, (SA*)&servaddr, sizeof(servaddr)) != 0)
-    {
-        std::cout << "connection with server failed" << std::endl;
-        throw std::runtime_error("connection with server failed");
-    }
-}
-
 int main()
 {
     int sockfd, connfd;
@@ -59,7 +49,9 @@ int main()
     try {
         // socket create and verification
         sockfd = socket(AF_INET, SOCK_STREAM, 0);
-        VerifySocket(sockfd);
+        if (sockfd == -1){
+            throw std::runtime_error("socket creation failure\n");
+        }
     }
     catch (std::exception& ex){
         std::cout << "Error: " << ex.what();
@@ -73,16 +65,10 @@ int main()
     servaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
     servaddr.sin_port = htons(PORT);
 
-    // connect the client socket to server socket
-    // if (connect(sockfd, (SA*)&servaddr, sizeof(servaddr)) != 0) {
-    //     std::cout << "Connection with server failed" << std::endl;
-    //     // exit(0);
-    //     // throw "connection failure";
-    //     throw std::exception();
-    // }
-    // else
     try {
-        VerifyConnection(sockfd, servaddr);
+        if (connect(sockfd, (SA*)&servaddr, sizeof(servaddr)) != 0){
+            throw std::runtime_error("connection with server failed\n");
+        }
     }
     catch (std::exception& ex){
         std::cout << "Error: " << ex.what();
@@ -90,9 +76,13 @@ int main()
     
     std::cout << "Connection established" << std::endl;
 
-    // function for chat
-    func(sockfd);
-
+    try{
+        // function for chat
+        func(sockfd);
+    }
+    catch (std::exception& ex){
+        std::cout << "Error: " << ex.what();
+    }
     // close the socket
     close(sockfd);
 }

@@ -17,6 +17,7 @@ public:
     void Send(int sockfd) const;
     IntModuloP& operator()(int m, int n);
     friend Matrix Mult(const Matrix& A, const Matrix& B);
+    Matrix operator+(const Matrix& A) const;
     friend std::istream& operator>>(std::istream& in, Matrix& A);
     friend std::ostream& operator<<(std::ostream& out, const Matrix& A);
     void resize(int m, int n);

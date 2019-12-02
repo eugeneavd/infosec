@@ -136,3 +136,15 @@ int Matrix::GetMod() const{
     return mod;
 }
 
+Matrix Matrix::operator+(const Matrix &A) const {
+    const auto [ma, na] = A.GetSize();
+    const int mod = A.GetMod();
+    if ((ma != m) || (na != n))
+        throw std::invalid_argument("Matrix sizes are incompatible");
+    Matrix Sum(ma, na, mod);
+    for (int i=0; i < ma; i++)
+        for (int j=0; j < na; j++)
+            Sum.mat[i][j] = mat[i][j] + A.mat[i][j];
+    return Sum;
+}
+

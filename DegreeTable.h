@@ -10,6 +10,10 @@ class DegreeTable {
     friend ostream& operator<<(ostream& out, const DegreeTable& dg);
 public:
     DegreeTable(int K, int L, int T);
+    vector<int> alpha;
+    vector<int> beta;
+    const vector<int> &GetAlpha() const;
+    const vector<int> &GetBeta() const;
 private:
     void GASPbig();
     void GASPsmall();

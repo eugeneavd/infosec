@@ -15,8 +15,8 @@ DegreeTable::DegreeTable(int K, int L, int T) : K(K), L(L), T(T){
 }
 
 void DegreeTable::GASPbig() {
-    vector<int> alpha(K + T);
-    vector<int> beta(L + T);
+    alpha.resize(K + T);
+    beta.resize(L + T);
     int k, l;
     // init alpha and beta according to
     // [1], def. 7
@@ -54,8 +54,8 @@ void DegreeTable::GASPbig() {
 }
 
 void DegreeTable::GASPsmall() {
-    vector<int> alpha(K + T);
-    vector<int> beta(L + T);
+    alpha.resize(K + T);
+    beta.resize(L + T);
     int k, l;
     // init alpha and beta according to
     // [1], def. 8
@@ -90,6 +90,14 @@ void DegreeTable::GASPsmall() {
             terms.insert(a_outer_b[i][j] = alpha[i] + beta[j]);
 }
 
+const vector<int> &DegreeTable::GetAlpha() const{
+    return alpha;
+}
+
+const vector<int> &DegreeTable::GetBeta() const{
+    return beta;
+}
+
 ostream &operator<<(ostream &out, const DegreeTable &dg) {
     out << std::setfill(' ');
     for (const auto& row: dg.a_outer_b) {
@@ -99,3 +107,4 @@ ostream &operator<<(ostream &out, const DegreeTable &dg) {
     }
     return out;
 }
+

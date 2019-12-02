@@ -108,3 +108,6 @@ ostream &operator<<(ostream &out, const DegreeTable &dg) {
     return out;
 }
 
+const int DegreeTable::GetTermsSize() const{
+    return terms.size();
+}

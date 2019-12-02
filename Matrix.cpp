@@ -132,4 +132,7 @@ std::pair<int, int> Matrix::GetSize() const {
     return std::pair<int, int>(m, n);
 }
 
+int Matrix::GetMod() const{
+    return mod;
+}
 

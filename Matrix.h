@@ -23,6 +23,7 @@ public:
     void Transpose();
     Matrix operator*(IntModuloP a) const;
     Matrix GetBlock(int block_num, int parts_num, short direction) const;
+    int GetMod() const;
     std::pair<int, int> GetSize() const;
 private:
     std::vector<std::vector<IntModuloP>> mat;

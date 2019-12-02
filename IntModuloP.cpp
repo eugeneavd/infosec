@@ -31,6 +31,8 @@ std::ostream& operator<<(std::ostream& out, const IntModuloP& x) {
 
 std::istream& operator>>(std::istream& in, IntModuloP& x) {
     in >> x.value;
+    while (x.value < 0) x.value += x.mod;
+    x.value = x.value % x.mod;
     return in;
 }
 

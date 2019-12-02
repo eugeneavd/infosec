@@ -5,6 +5,8 @@
 #ifndef INFOSEC_MATRIX_H
 #define INFOSEC_MATRIX_H
 
+#define PART_HORIZONTAL 0
+#define PART_VERTICAL   1
 
 class Matrix {
 public:
@@ -18,7 +20,8 @@ public:
     friend std::ostream& operator<<(std::ostream& out, const Matrix& A);
     void resize(int m, int n);
     void Transpose();
-    Matrix operator*(const IntModuloP a) const;
+    Matrix operator*(IntModuloP a) const;
+    Matrix GetBlock(int block_num, int parts_num, short direction);
 private:
     std::vector<std::vector<IntModuloP>> mat;
     int m=0, n=0;

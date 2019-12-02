@@ -3,6 +3,8 @@
 #include <vector>
 #include <iostream>
 #include <iomanip>
+#include <exception>
+#include <string>
 
 std::ostream& operator<<(std::ostream& out, const Matrix& A) {
    out << std::setfill(' ');
@@ -84,10 +86,47 @@ void Matrix::Transpose() {
             mat[i][j] = temp[j][i];
 }
 
-Matrix Matrix::operator*(const IntModuloP a) const {
+Matrix Matrix::operator*(IntModuloP a) const {
     Matrix aA(m, n, mod);
     for (int i = 0; i < m; i++)
         for (int j = 0; j < n; j++)
             aA(i, j) = a * mat[i][j];
+    return aA;
 }
+
+Matrix Matrix::GetBlock(int block_num, int parts_num, short direction) {
+    if (direction == PART_HORIZONTAL) {
+        // check if (*, n) dimension is appropriate for horizontal partion
+        if (n % parts_num) {
+            throw std::invalid_argument("Can't partition matrix with size (*, "
+                                        + std::to_string(n) + ") into " + std::to_string(parts_num) + " parts.");
+        }
+        // check block number, it starts from 0
+        if (block_num >= parts_num)
+            throw std::invalid_argument(" block_num should be less than number of parts");
+        int chunk_size = n / parts_num;
+        Matrix Block(m, chunk_size, mod);
+        for (int i = 0; i < Block.m; i++)
+            for (int j = 0; j < Block.n; j++)
+                Block.mat[i][j] = mat[i][j + block_num * chunk_size];
+        return Block;
+    } else if (direction == PART_VERTICAL) {
+        // check if (m, *) dimension is appropriate for horizontal partion
+        if (m % parts_num) {
+            throw std::invalid_argument("Can't partition matrix with size ("
+                                        + std::to_string(m) + ", *) into " + std::to_string(parts_num) + " parts.");
+        }
+        // check block number, it starts from 0
+        if (block_num >= parts_num)
+            throw std::invalid_argument(" block_num should be less than number of parts");
+        const int chunk_size = m / parts_num;
+        Matrix Block(chunk_size, n, mod);
+        for (int i = 0; i < Block.m; i++)
+            for (int j = 0; j < Block.n; j++)
+                Block.mat[i][j] = mat[i + block_num * chunk_size][j];
+        return Block;
+    } else
+        throw std::invalid_argument("Direction is either PART_HORIZONTAL or PART_VERTICAL");
+}
+
 

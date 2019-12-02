@@ -3,7 +3,6 @@
 #include <vector>
 #include <iostream>
 #include <iomanip>
-#include <exception>
 #include <string>
 
 std::ostream& operator<<(std::ostream& out, const Matrix& A) {
@@ -94,7 +93,7 @@ Matrix Matrix::operator*(IntModuloP a) const {
     return aA;
 }
 
-Matrix Matrix::GetBlock(int block_num, int parts_num, short direction) {
+Matrix Matrix::GetBlock(int block_num, int parts_num, short direction) const {
     if (direction == PART_HORIZONTAL) {
         // check if (*, n) dimension is appropriate for horizontal partion
         if (n % parts_num) {
@@ -127,6 +126,10 @@ Matrix Matrix::GetBlock(int block_num, int parts_num, short direction) {
         return Block;
     } else
         throw std::invalid_argument("Direction is either PART_HORIZONTAL or PART_VERTICAL");
+}
+
+std::pair<int, int> Matrix::GetSize() const {
+    return std::pair<int, int>(m, n);
 }
 
 

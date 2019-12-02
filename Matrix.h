@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <iostream>
+#include <utility>
 #ifndef INFOSEC_MATRIX_H
 #define INFOSEC_MATRIX_H
 
@@ -21,11 +22,12 @@ public:
     void resize(int m, int n);
     void Transpose();
     Matrix operator*(IntModuloP a) const;
-    Matrix GetBlock(int block_num, int parts_num, short direction);
+    Matrix GetBlock(int block_num, int parts_num, short direction) const;
+    std::pair<int, int> GetSize() const;
 private:
     std::vector<std::vector<IntModuloP>> mat;
     int m=0, n=0;
-    int mod;
+    int mod=1;
 };
 
 std::ostream& operator<<(std::ostream& out, const Matrix& A);

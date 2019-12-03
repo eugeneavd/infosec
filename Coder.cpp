@@ -12,10 +12,13 @@ Coder::Coder(Matrix A, Matrix B, int K, int L, int T) : K(K), L(L), T(T)
     const auto [ma, na] = A.GetSize();
     const auto [mb, nb] = B.GetSize();
     const auto mod = A.GetMod();
+    terms = dg.GetTerms();
     
     vector<Matrix> R (T, Matrix(ma/K, na, mod));
     vector<Matrix> S (T, Matrix(mb, nb/L, mod));
-    const auto N = dg.GetTermsSize();
+    N = dg.GetTermsSize();
+    f.resize(N);
+    g.resize(N);
     vector<IntModuloP> x(N);
 
     for (int i = 0; i < N; i++)
@@ -24,7 +27,7 @@ Coder::Coder(Matrix A, Matrix B, int K, int L, int T) : K(K), L(L), T(T)
         x[i] = ind;
     }
     
-    vector<Matrix> f(N), g(N);
+    // vector<Matrix> f(N), g(N);
     for(int i = 0; i < N; i++){
         auto temp = R[T - 1];
         for (int k = K + T - 1; k > -1; k--)
@@ -58,4 +61,16 @@ Coder::Coder(Matrix A, Matrix B, int K, int L, int T) : K(K), L(L), T(T)
         f[i] = val1;
         g[i] = val2;
     }
+}
+
+const vector<Matrix> &Coder::GetF() const{
+    return f;
+}
+
+const vector<Matrix> &Coder::GetG() const{
+    return g;
+}
+
+const set<int> &Coder::GetTerms() const{
+    return terms;
 }

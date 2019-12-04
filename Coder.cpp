@@ -7,6 +7,7 @@
 Coder::Coder(Matrix A, Matrix B, int K, int L, int T) : K(K), L(L), T(T)
 {
     const auto dg = DegreeTable(K, L, T);
+    // почему const auto, а не const auto&
     const auto Adegrees = dg.GetAlpha();
     const auto Bdegrees = dg.GetBeta();
     const auto [ma, na] = A.GetSize();
@@ -23,6 +24,7 @@ Coder::Coder(Matrix A, Matrix B, int K, int L, int T) : K(K), L(L), T(T)
 
     for (int i = 0; i < N; i++)
     {
+        // переменная ind не нужна
         IntModuloP ind(mod, i);
         x[i] = ind;
     }
@@ -34,6 +36,9 @@ Coder::Coder(Matrix A, Matrix B, int K, int L, int T) : K(K), L(L), T(T)
         {
             if (k > K)
             {
+                // segfault на первой итерации
+                // неверная логика программы
+                // коэфф. R[T-1] встречается два раза
                 temp = R[k-K] + temp * (x[i]^(Adegrees[k+1] - Adegrees[k]));
             }
             else
@@ -44,7 +49,7 @@ Coder::Coder(Matrix A, Matrix B, int K, int L, int T) : K(K), L(L), T(T)
         }
         const auto val1 = temp;
 
-        auto temp = S[T - 1];
+        temp = S[T - 1];
         for (int l = L + T - 1; l > -1; l--)
         {
             if (l > L)
@@ -57,6 +62,7 @@ Coder::Coder(Matrix A, Matrix B, int K, int L, int T) : K(K), L(L), T(T)
             }
             
         }
+        // переменные val1, val2 не нужны
         const auto val2 = temp;
         f[i] = val1;
         g[i] = val2;

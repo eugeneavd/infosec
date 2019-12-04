@@ -6,6 +6,7 @@
 
 class IntModuloP {
 public:
+    IntModuloP();
     IntModuloP (int mod, int value);
 
     int GetMod() const;

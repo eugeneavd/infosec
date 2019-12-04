@@ -1,4 +1,5 @@
 #include "IntModuloP.h"
+#include <limits>
 
 int gcd(int a, int b, int & x, int & y) {
     if (a == 0) {
@@ -72,4 +73,9 @@ IntModuloP::operator int() const {
 
 int IntModuloP::GetMod() const {
     return mod;
+}
+
+IntModuloP::IntModuloP() {
+    mod = std::numeric_limits<int>::max();
+    value = 0;
 }

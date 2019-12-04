@@ -6,7 +6,6 @@
 #include <string>
 #include <cstdlib>
 #include <utility>
-#include <tuple>
 
 std::ostream& operator<<(std::ostream& out, const Matrix& A) {
    out << std::setfill(' ');
@@ -206,7 +205,7 @@ Matrix::Inverse() const {
                 }
             }
             if (! found)
-                return std::make_tuple(false, Matrix());
+                return std::make_pair(false, Matrix());
         }
         __inv = one / A[i][i];
         for (int j = i + 1; j < N; j++) {
@@ -240,7 +239,7 @@ Matrix::Inverse() const {
                 A[j][k] = A[j][k] - A[i][k] * A[j][i];
             }
     }
-    return std::make_tuple(true, I);
+    return std::make_pair(true, I);
 }
 
 Matrix IdentityMatrix(int N, int prime) {

@@ -22,7 +22,7 @@ void func(int sockfd){
     }
     auto A = Matrix(size[0], size[1], PRIME, sockfd);
     auto B = Matrix(size[2], size[3], PRIME, sockfd);
-    auto C = Mult(A, B);
+    auto C = A * B;
     C.Send(sockfd);
 }
 

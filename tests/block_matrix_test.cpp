@@ -12,5 +12,6 @@ int main() {
     auto [__, A_inv_inv] = A_inv.Inverse();
     std::cout << A_inv_inv << std::endl;
     std::cout << A << std::endl;
+    auto [isInv, B] = A.Inverse();
     return 0;
 }

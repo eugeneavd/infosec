@@ -6,6 +6,7 @@
 #include <string>
 #include <cstdlib>
 #include <utility>
+#include <tuple>
 
 std::ostream& operator<<(std::ostream& out, const Matrix& A) {
    out << std::setfill(' ');
@@ -190,7 +191,6 @@ Matrix::Inverse() const {
         }
         std::cout << I;
 */
-
 
         // choose leading element
         if (A[i][i] == zero) {

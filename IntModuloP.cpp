@@ -62,6 +62,10 @@ IntModuloP operator^(const IntModuloP &x, int n) {
     }
 }
 
+bool operator==(const IntModuloP &lhs, const IntModuloP &rhs) {
+    return lhs.value == rhs.value;
+}
+
 IntModuloP::operator int() const {
     return value;
 }

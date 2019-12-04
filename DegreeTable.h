@@ -14,8 +14,8 @@ public:
     vector<int> beta;
     const vector<int> &GetAlpha() const;
     const vector<int> &GetBeta() const;
-    const int GetTermsSize() const;
-    const set<int> GetTerms() const;
+    int GetTermsSize() const;
+    set<int> GetTerms() const;
 private:
     void GASPbig();
     void GASPsmall();

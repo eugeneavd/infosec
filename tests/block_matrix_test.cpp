@@ -1,9 +1,15 @@
 #include "../Matrix.h"
 #include <iostream>
+#include <cstdlib>
 
 int main() {
     Matrix A (12, 6, 73);
-    std::cin >> A;
-    Matrix A_block =  A.GetBlock(1, 3, PART_HORIZONTAL) * IntModuloP(73, 2);
-    std::cout << A_block;
+    Matrix B (12, 6, 73);
+    srand(0);
+    A.FillRandomly();
+    B.FillRandomly();
+    std::cout << A;
+    std::cout << B;
+    std::cout << (A == B);
+    return 0;
 }

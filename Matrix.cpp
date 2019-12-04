@@ -4,6 +4,7 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include <cstdlib>
 
 std::ostream& operator<<(std::ostream& out, const Matrix& A) {
    out << std::setfill(' ');
@@ -54,6 +55,14 @@ Matrix Mult(const Matrix &A, const Matrix &B) {
             for (int k=0; k < l; k++)
                 C.mat[i][j] = C.mat[i][j] + A.mat[i][k] * Bt.mat[j][k];
     return C;
+}
+
+bool operator==(const Matrix &lhs, const Matrix &rhs) {
+    if (lhs.GetSize() != rhs.GetSize())
+        throw std::invalid_argument ("Can't compare matrices with different dimensions");
+    if (lhs.mod != rhs.mod)
+        throw std::invalid_argument ("Can't compare matrices over different fields");
+    return lhs.mat == rhs.mat;
 }
 
 Matrix::Matrix(int m, int n, int mod, int sockfd) : Matrix(m, n, mod){
@@ -138,13 +147,24 @@ int Matrix::GetMod() const{
 
 Matrix Matrix::operator+(const Matrix &A) const {
     const auto [ma, na] = A.GetSize();
-    const int mod = A.GetMod();
+    const int q = A.GetMod();
     if ((ma != m) || (na != n))
         throw std::invalid_argument("Matrix sizes are incompatible");
+    if (mod != q)
+        throw std::invalid_argument("Matrix are over different fields");
     Matrix Sum(ma, na, mod);
     for (int i=0; i < ma; i++)
         for (int j=0; j < na; j++)
             Sum.mat[i][j] = mat[i][j] + A.mat[i][j];
     return Sum;
 }
+
+// if you want consistent random matrix generation use predefined srand
+void Matrix::FillRandomly() {
+    for (auto& row: mat)
+        for (auto& elem: row)
+            elem = IntModuloP(mod, rand());
+}
+
+
 

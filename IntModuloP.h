@@ -13,6 +13,7 @@ public:
     friend IntModuloP operator/(const IntModuloP& x, const IntModuloP& y);
     friend std::ostream& operator<<(std::ostream& out, const IntModuloP& x);
     friend std::istream& operator>>(std::istream& in, IntModuloP& x);
+    friend bool operator==(const IntModuloP &lhs, const IntModuloP &rhs);
     // convert to int
     explicit operator int() const;
 private:
@@ -28,6 +29,7 @@ IntModuloP operator^(const IntModuloP& x, int n);
 
 std::ostream& operator<<(std::ostream& out, const IntModuloP& x);
 std::istream& operator>>(std::istream& in, IntModuloP& x);
+bool operator==(const IntModuloP &lhs, const IntModuloP &rhs);
 
 int gcd (int a, int b, int & x, int & y);
 #endif //INFOSEC_INTMODULOP_H

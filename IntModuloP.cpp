@@ -69,3 +69,7 @@ bool operator==(const IntModuloP &lhs, const IntModuloP &rhs) {
 IntModuloP::operator int() const {
     return value;
 }
+
+int IntModuloP::GetMod() const {
+    return mod;
+}

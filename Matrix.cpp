@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <string>
 #include <cstdlib>
+#include <utility>
 
 std::ostream& operator<<(std::ostream& out, const Matrix& A) {
    out << std::setfill(' ');
@@ -43,7 +44,7 @@ IntModuloP& Matrix::operator()(int m, int n) {
     return mat[m][n];
 }
 
-Matrix Mult(const Matrix &A, const Matrix &B) {
+Matrix operator*(const Matrix &A, const Matrix &B) {
     int m = A.m;
     int l = A.n; // assuming A.n = B.m
     int n = B.n;
@@ -166,5 +167,95 @@ void Matrix::FillRandomly() {
             elem = IntModuloP(mod, rand());
 }
 
+std::pair<bool, Matrix>
+Matrix::Inverse() const {
+    if (m != n) throw std::invalid_argument("Matrix is not square");
+
+    const int N = m;
+    auto A = mat;
+    auto I = IdentityMatrix(N, mod);
+
+    const IntModuloP zero(mod, 0);
+    const IntModuloP one(mod, 1);
+    IntModuloP coef(mod, 1);
+    IntModuloP __inv(mod, 1);
+    //perform direct Gauss elimination and apply same to one
+    for (int i = 0; i < N; i++) {
+
+/*
+        for (const auto& row: A) {
+            for (const auto &elem: row)
+                std::cout << elem << ' ';
+            std::cout << std::endl;
+        }
+        std::cout << I;
+*/
+
+
+        // choose leading element
+        if (A[i][i] == zero) {
+            bool found = false;
+            for (int j=i + 1; j < N; j++) {
+                if ((A[i][j] == zero)) {
+                    found = true;
+                    for (int k = 0; k < N; k++) {
+                        std::swap(A[i][k], A[j][k]);
+                        std::swap(I.mat[i][k], I.mat[j][k]);
+                    }
+                    break;
+                }
+            }
+            if (! found)
+                return std::make_tuple(false, Matrix());
+        }
+        __inv = one / A[i][i];
+        for (int j = i + 1; j < N; j++) {
+            coef = __inv * A[j][i];
+            for (int k = 0; k < N; k++) {
+                A[j][k] = A[j][k] - A[i][k] * coef;
+                I.mat[j][k] = I.mat[j][k] - I.mat[i][k] * coef;
+            }
+        }
+        for (int k=0; k < N; k++) {
+            A[i][k] = A[i][k] * __inv;
+            I.mat[i][k] = I.mat[i][k] * __inv;
+        }
+    }
+
+    // perform reverse Gauss elimination
+    // matrix has only 1s one diagonal
+
+    for (int i = N - 1; i >= 0; i--) {
+/*
+        for (const auto& row: A) {
+            for (const auto &elem: row)
+                std::cout << elem << ' ';
+            std::cout << std::endl;
+        }
+        std::cout << I;
+*/
+        for (int j = i - 1; j >= 0; j--)
+            for (int k = 0; k < N; k++) {
+                I.mat[j][k] = I.mat[j][k] - I.mat[i][k] * A[j][i];
+                A[j][k] = A[j][k] - A[i][k] * A[j][i];
+            }
+    }
+    return std::make_tuple(true, I);
+}
+
+Matrix IdentityMatrix(int N, int prime) {
+    Matrix I(N, N, prime);
+    for (int i = 0; i < N; i++)
+        I.mat[i][i] = IntModuloP(prime, 1);
+    return I;
+}
+
+void Matrix::SetElem(int row, int col, IntModuloP x) {
+    if (x.GetMod() != mod)
+        throw std::invalid_argument("Can't set matrix elem to x of different field");
+    if (!((0 <= row) && (row < m)) || !((0 <= col) && (col < n)))
+        throw std::invalid_argument("Can't set matrix elem to x, out of range");
+    mat[row][col] = x;
+}
 
 

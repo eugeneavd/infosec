@@ -7,6 +7,9 @@
 class IntModuloP {
 public:
     IntModuloP (int mod, int value);
+
+    int GetMod() const;
+
     friend IntModuloP operator+(const IntModuloP& x, const IntModuloP& y);
     friend IntModuloP operator-(const IntModuloP& x, const IntModuloP& y);
     friend IntModuloP operator*(const IntModuloP& x, const IntModuloP& y);

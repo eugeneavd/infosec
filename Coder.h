@@ -21,5 +21,4 @@ public:
     const set<int> &GetTerms() const;
 };
 
-
 #endif //INFOSEC_CODER_H

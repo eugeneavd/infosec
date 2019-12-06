@@ -32,7 +32,6 @@ public:
     std::pair<int, int> GetSize() const;
     void FillRandomly();
     std::pair<bool, Matrix> Inverse() const;
-    void SetElem(int row, int col, IntModuloP x);
 protected:
     std::vector<std::vector<IntModuloP>> mat;
     int m=0, n=0;
@@ -45,5 +44,6 @@ bool operator==(const Matrix& lhs, const Matrix& rhs);
 Matrix operator*(const Matrix& A, const Matrix& B);
 
 Matrix IdentityMatrix(int N, int prime);
+Matrix Vandermonde(const std::vector<IntModuloP>& a, const std::vector<int>& deg);
 
 #endif //INFOSEC_MATRIX_H

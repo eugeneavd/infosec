@@ -14,8 +14,8 @@ int gcd(int a, int b, int & x, int & y) {
 }
 
 IntModuloP operator/(const IntModuloP &x, const IntModuloP &y) {
-    int d, p, q;
-    d = gcd(y.value, static_cast<int> (y.mod), p, q);
+    int p, q;
+    gcd(y.value, static_cast<int> (y.mod), p, q);
     while (p < 0) p += y.mod;
     return x * IntModuloP(y.mod, p);
 }
@@ -56,7 +56,9 @@ IntModuloP operator-(const IntModuloP& x, const IntModuloP& y) {
 IntModuloP operator^(const IntModuloP &x, int n) {
     if (n < 0) throw std::invalid_argument("Negative degree");
     if ((n % 2) != 0) {
-        return x * x^(n-1);
+        return x * (x^(n-1));
+    } else if (n == 0) {
+        return IntModuloP(x.GetMod(), 1);
     } else {
         IntModuloP temp = x^(n/2);
         return temp * temp;

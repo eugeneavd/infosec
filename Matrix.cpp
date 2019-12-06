@@ -87,6 +87,8 @@ void Matrix::Send(int sockfd) const {
     }
 }
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "ArgumentSelectionDefects"
 void Matrix::Transpose() {
     const auto temp = mat;
     resize(n, m);
@@ -94,6 +96,7 @@ void Matrix::Transpose() {
         for (int j=0; j < n; j++)
             mat[i][j] = temp[j][i];
 }
+#pragma clang diagnostic pop
 
 Matrix Matrix::operator*(IntModuloP a) const {
     Matrix aA(m, n, mod);
@@ -164,7 +167,7 @@ Matrix Matrix::operator+(const Matrix &A) const {
 void Matrix::FillRandomly() {
     for (auto& row: mat)
         for (auto& elem: row)
-            elem = IntModuloP(mod, rand());
+            elem = IntModuloP(mod, rand()); // NOLINT(cert-msc30-c,cert-msc50-cpp)
 }
 
 std::pair<bool, Matrix>
@@ -249,12 +252,12 @@ Matrix IdentityMatrix(int N, int prime) {
     return I;
 }
 
-void Matrix::SetElem(int row, int col, IntModuloP x) {
-    if (x.GetMod() != mod)
-        throw std::invalid_argument("Can't set matrix elem to x of different field");
-    if (!((0 <= row) && (row < m)) || !((0 <= col) && (col < n)))
-        throw std::invalid_argument("Can't set matrix elem to x, out of range");
-    mat[row][col] = x;
+Matrix Vandermonde(const std::vector<IntModuloP>& a, const std::vector<int>& deg) {
+    const int N = a.size();
+    if (N != deg.size()) throw std::invalid_argument("a.size != deg.size");
+    Matrix V(N, N, a[0].GetMod()); //assuming  all a[.] have equal mod
+    for (int i=0; i < N; i++)
+        for (int j=0; j < N; j++)
+            V(i, j) = a[i]^deg[j];
+    return V;
 }
-
-

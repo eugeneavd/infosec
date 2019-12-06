@@ -252,6 +252,10 @@ Matrix IdentityMatrix(int N, int prime) {
     return I;
 }
 
+const IntModuloP &Matrix::operator()(int m, int n) const {
+    return mat[m][n];
+}
+
 Matrix Vandermonde(const std::vector<IntModuloP>& a, const std::vector<int>& deg) {
     const int N = a.size();
     if (N != deg.size()) throw std::invalid_argument("a.size != deg.size");

@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 add_library(matrix Matrix.cpp Matrix.h)
 add_library(intmodp IntModuloP.cpp IntModuloP.h)
 add_library(coder Coder.cpp Coder.h)
+add_library(decoder Decoder.cpp Decoder.h)
 
 add_executable(myclient myclient.cpp)
 add_executable(myserver myserver.cpp)

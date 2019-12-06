@@ -18,6 +18,7 @@ public:
     Matrix(int m, int n, int prime, int sockfd);
     void Send(int sockfd) const;
     IntModuloP& operator()(int m, int n);
+    const IntModuloP& operator()(int m, int n) const;
     friend Matrix operator*(const Matrix& A, const Matrix& B);
     Matrix operator+(const Matrix& A) const;
     friend std::istream& operator>>(std::istream& in, Matrix& A);

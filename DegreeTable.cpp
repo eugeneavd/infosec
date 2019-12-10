@@ -7,6 +7,7 @@
 #include "DegreeTable.h"
 
 using namespace std;
+
 DegreeTable::DegreeTable(int K, int L, int T) : K(K), L(L), T(T){
     if (T < min(K, L))
         GASPsmall();
@@ -97,6 +98,11 @@ const vector<int> &DegreeTable::GetAlpha() const{
 const vector<int> &DegreeTable::GetBeta() const{
     return beta;
 }
+
+const vector<vector<int>> &DegreeTable::GetMatr() const{
+    return a_outer_b;
+}
+
 
 ostream &operator<<(ostream &out, const DegreeTable &dg) {
     out << std::setfill(' ');

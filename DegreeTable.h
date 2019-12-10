@@ -14,6 +14,7 @@ public:
     vector<int> beta;
     const vector<int> &GetAlpha() const;
     const vector<int> &GetBeta() const;
+    const vector<vector<int>> &GetMatr() const;
     int GetTermsSize() const;
     set<int> GetTerms() const;
 private:

@@ -5,8 +5,8 @@
 #pragma clang diagnostic ignored "-Wunused-variable"
 int main() {
     int p = 7;
-    IntModuloP x(17, 0), y (17, 1);
-    std::cout << (x^0) << std::endl;
+    IntModuloP x(17, 2), y (17, 9);
+    std::cout << x+y << std::endl;
     return 0;
 }
 #pragma clang diagnostic pop

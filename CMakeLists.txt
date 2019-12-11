@@ -16,8 +16,10 @@ add_executable(dg_test tests/dg_test.cpp DegreeTable.cpp)
 add_executable(block_matrix_test tests/block_matrix_test.cpp)
 add_executable(intmodp_test tests/intmodp_test.cpp IntModuloP.cpp)
 add_executable(coder_test tests/coder_test.cpp Coder.cpp)     #
+add_executable(horner_test tests/horner_test.cpp)
 
 target_link_libraries(myserver matrix intmodp)
 target_link_libraries(block_matrix_test matrix intmodp)
 target_link_libraries(coder_test coder matrix intmodp dg)
 target_link_libraries(myclient matrix intmodp)
+target_link_libraries(horner_test matrix intmodp)

@@ -29,10 +29,11 @@ std::istream& operator>>(std::istream& in, Matrix& A) {
     return in;
 }
 
-void Matrix::resize(int m, int n) {
-    mat = std::vector<std::vector<IntModuloP>>  (m, std::vector<IntModuloP>(n, IntModuloP(mod, 0)));
-    this->m = m;
-    this->n = n;
+void Matrix::resize(int m_new, int n_new) {
+    mat = std::vector<std::vector<IntModuloP>>
+            (m_new, std::vector<IntModuloP>(n_new, IntModuloP(mod, 0)));
+    this->m = m_new;
+    this->n = n_new;
 }
 
 

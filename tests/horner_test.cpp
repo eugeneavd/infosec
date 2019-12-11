@@ -30,7 +30,7 @@ int main() {
             temp = B.GetBlock(l, L, PART_HORIZONTAL) + temp * (a ^ (Bdegrees[l + 1] - Bdegrees[l]));
         }
         temp = temp * (a ^ (Bdegrees[0]));
-
     }
     cout << temp << endl;
+    return 0;
 }

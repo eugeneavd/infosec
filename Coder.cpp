@@ -52,19 +52,17 @@ Coder::Coder(int K, int L, int T, int seed) : K(K), L(L), T(T), dg(DegreeTable(K
 
 void Coder::Code(Matrix A, Matrix B){
     mod = A.GetMod();
+    // cout << mod << endl;
     const auto [ma, na] = A.GetSize();
     const auto [mb, nb] = B.GetSize();
 
-    if (na != nb)
+    if (na != mb)
     {
         throw invalid_argument("matrix dimensions incompatible");
     }
-    
     vector<int> vec;
     vec.assign(terms.begin(), terms.end());     // fill vec with values from terms
     ReverseVdm = Vandermonde(a, vec);
-    // так делать нельзя: два раза исполняется трудоемкая операция
-    // научиться присваивать значения auto [ , ] = Inverse
     auto [IsInv, Rev] = ReverseVdm.Inverse();
 
     if (IsInv)
@@ -77,26 +75,29 @@ void Coder::Code(Matrix A, Matrix B){
     vector<Matrix> S (T, Matrix(mb, nb/L, mod));
     for(auto& elem : R){
         elem.FillRandomly();
+        // cout << elem << endl;
     }
     for(auto& elem : S){
         elem.FillRandomly();
+        // cout << elem << endl;
     }
 
     for(int i = 0; i < N; i++){
         auto temp = R[T - 1];
+        // cout << a[i] << endl;
         for (int k = K + T - 2; k > -1; k--)
         {
             if (k > K - 1)
             {
-                // segfault на первой итерации +
-                // неверная логика программы
-                // коэфф. R[T-1] встречается два раза +
                 temp = R[k-K] + temp * (a[i]^(Adegrees[k+1] - Adegrees[k]));
+                // cout << temp << endl;
             }
             else
             {
                 temp = A.GetBlock(k, K, PART_VERTICAL) + temp * (a[i]^(Adegrees[k+1] - Adegrees[k]));
+                // cout << temp << endl;
             }
+            temp = temp * (a[i]^(Adegrees[0]));
             
         }
         f[i] = temp;
@@ -106,12 +107,13 @@ void Coder::Code(Matrix A, Matrix B){
         {
             if (l > L - 1)
             {
-                temp = S[l-L] + temp * (a[i]^(Adegrees[l+1] - Adegrees[l]));
+                temp = S[l-L] + temp * (a[i]^(Bdegrees[l+1] - Bdegrees[l]));
             }
             else
             {
-                temp = B.GetBlock(l, L, PART_HORIZONTAL) + temp * (a[i]^(Adegrees[l+1] - Adegrees[l]));
+                temp = B.GetBlock(l, L, PART_HORIZONTAL) + temp * (a[i]^(Bdegrees[l+1] - Bdegrees[l]));
             }
+            temp = temp * (a[i]^(Bdegrees[0]));
             
         }
         // переменные val1, val2 не нужны +
@@ -122,7 +124,7 @@ void Coder::Code(Matrix A, Matrix B){
     const auto &temp_matr = dg.GetMatr();
     for (int k = 0; k < K + T - 1; k++)
     {
-        for (int l = 0; l < L + T  - 1; l++)
+        for (int l = 0; l < L + T - 1; l++)
         {
             DegMatr[k][l] = temp_matr[k+1][l+1];
         }

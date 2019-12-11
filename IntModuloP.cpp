@@ -43,7 +43,10 @@ IntModuloP operator+(const IntModuloP& x, const IntModuloP& y) {
 }
 
 IntModuloP::IntModuloP(int mod, int value) : mod(mod), value(value) {
-    if (mod <= 0 ) throw std::invalid_argument("Modulus must be positive");
+    if (mod <= 0 ) {
+        // std::cout << mod << " " << value << std::endl;
+        throw std::invalid_argument("Modulus must be positive");
+    }
     while (value < 0) value += mod;
     this->value = value % mod;
 }
@@ -54,10 +57,12 @@ IntModuloP operator-(const IntModuloP& x, const IntModuloP& y) {
 }
 
 IntModuloP operator^(const IntModuloP &x, int n) {
+    // std::cout << x.GetMod() << " " << x << std::endl;
     if (n < 0) throw std::invalid_argument("Negative degree");
     if ((n % 2) != 0) {
         return x * (x^(n-1));
     } else if (n == 0) {
+        // return IntModuloP(mod, 1);
         return IntModuloP(x.GetMod(), 1);
     } else {
         IntModuloP temp = x^(n/2);

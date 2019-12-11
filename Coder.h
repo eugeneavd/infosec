@@ -22,7 +22,7 @@ private:
     vector<vector<int>> DegMatr;
     
 public:
-    Coder(int K, int L, int T, vector<IntModuloP> &val_a, int seed = 0);        //, int mod
+    Coder(int K, int L, int T, vector<IntModuloP> &val_a, int seed = 0);
     Coder(int K, int L, int T, int seed = 0);
     void Code(Matrix A, Matrix B);
     const vector<Matrix> &GetF() const;

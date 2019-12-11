@@ -118,10 +118,11 @@ void Coder::Code(Matrix A, Matrix B){
         g[i] = temp;
     }
 
-    auto &temp_matr = dg.GetMatr();
-    for (int k = 0; k < K; k++)
+    DegMatr.resize(K + T - 1, vector<int>(L + T  - 1));
+    const auto &temp_matr = dg.GetMatr();
+    for (int k = 0; k < K + T - 1; k++)
     {
-        for (int l = 0; l < L; l++)
+        for (int l = 0; l < L + T  - 1; l++)
         {
             DegMatr[k][l] = temp_matr[k+1][l+1];
         }

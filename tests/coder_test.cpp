@@ -3,10 +3,10 @@
 
 int main(int argc, char const *argv[])
 {
-	const int mod = 23;
+	const int mod = 13;
 
     std::vector<IntModuloP> vec;
-    for (int i = 0; i < 18; i++)
+    for (int i = 0; i < 8; i++)
     {
         vec.push_back(IntModuloP(mod, i));
     }
@@ -22,6 +22,11 @@ int main(int argc, char const *argv[])
     Matrix B = IdentityMatrix(3, mod)*IntModuloP(mod, 3);
     // cout << A.GetMod() << " " << B.GetMod() << std::endl;
     coder.Code(A, B);
+    const auto test_f = coder.GetF();
+
+    for(auto &elem: test_f){
+        cout << elem;
+    }
     
     return 0;
 }

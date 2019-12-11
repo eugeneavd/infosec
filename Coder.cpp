@@ -18,6 +18,10 @@ Coder::Coder(int K, int L, int T, vector<IntModuloP> &val_a, int seed) : K(K), L
     g.resize(N);
     a.resize(N);
 
+    /*
+     * Alas, code repetition be again!! Thou have a ::SetA function
+     */
+
     for (int i = 0; i < N; i++)
     {
         a[i] = val_a[i];
@@ -37,6 +41,9 @@ Coder::Coder(int K, int L, int T, int seed) : K(K), L(L), T(T), dg(DegreeTable(K
     a.resize(N);
 
     srand(seed);
+    /*
+     * Code repetition!!! The ::SetARandom does the same.
+     */
     int in, im = 0;
 
     for (in = 0; in < mod && im < N; ++in) {
@@ -62,14 +69,19 @@ void Coder::Code(Matrix A, Matrix B){
     }
     vector<int> vec;
     vec.assign(terms.begin(), terms.end());     // fill vec with values from terms
-    ReverseVdm = Vandermonde(a, vec);
-    auto [IsInv, Rev] = ReverseVdm.Inverse();
 
-    if (IsInv)
-    {
-        ReverseVdm = Rev;
+    /*
+     * NB: V might be uninvertable so we might need to generate vector a again.
+     */
+    auto V = Vandermonde(a, vec);
+    auto [IsInv, Rev] = V.Inverse();
+    while (not IsInv) {
+        SetARandom();
+        V = Vandermonde(a, vec);
+        tie(IsInv, Rev) = V.Inverse();
     }
-    
+    ReverseVdm = Rev;
+
 
     vector<Matrix> R (T, Matrix(ma/K, na, mod));
     vector<Matrix> S (T, Matrix(mb, nb/L, mod));
@@ -126,6 +138,7 @@ void Coder::Code(Matrix A, Matrix B){
     {
         for (int l = 0; l < L + T - 1; l++)
         {
+            // NOT CORRECT!!!
             DegMatr[k][l] = temp_matr[k+1][l+1];
         }
     }
@@ -155,10 +168,10 @@ void Coder::SetA(vector<IntModuloP> &val){
 }
 
 void Coder::SetARandom(){
-    // for(int i = 0; i < N; i++)
-    // {
-    //     a[i] = IntModuloP(mod, i);
-    // }
+    /*
+     * The Knuth algorithm is not optimal for our purpose.
+     * Implement The Floyd algorithm!!!
+     */
     int in, im = 0;
 
     for (in = 0; in < mod && im < N; ++in) {

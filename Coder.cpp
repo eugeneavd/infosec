@@ -109,9 +109,9 @@ void Coder::Code(Matrix A, Matrix B){
                 temp = A.GetBlock(k, K, PART_VERTICAL) + temp * (a[i]^(Adegrees[k+1] - Adegrees[k]));
                 // cout << temp << endl;
             }
-            temp = temp * (a[i]^(Adegrees[0]));
             
         }
+        temp = temp * (a[i]^(Adegrees[0]));
         f[i] = temp;
 
         temp = S[T - 1];
@@ -125,22 +125,28 @@ void Coder::Code(Matrix A, Matrix B){
             {
                 temp = B.GetBlock(l, L, PART_HORIZONTAL) + temp * (a[i]^(Bdegrees[l+1] - Bdegrees[l]));
             }
-            temp = temp * (a[i]^(Bdegrees[0]));
             
         }
-        // переменные val1, val2 не нужны +
+        temp = temp * (a[i]^(Bdegrees[0]));
         g[i] = temp;
     }
 
-    DegMatr.resize(K + T - 1, vector<int>(L + T  - 1));
+    DegMatr.resize(K + T, vector<int>(L + T));
     const auto &temp_matr = dg.GetMatr();
-    for (int k = 0; k < K + T - 1; k++)
+    for (int k = 0; k < K + T; k++)
     {
-        for (int l = 0; l < L + T - 1; l++)
+        for (int l = 0; l < L + T; l++)
         {
             // NOT CORRECT!!!
-            DegMatr[k][l] = temp_matr[k+1][l+1];
+            DegMatr[k][l] = temp_matr[k][l];
         }
+    }
+    cout << "Degree matrix:\n";
+    for(auto &row : DegMatr){
+        for(auto &elem: row){
+            cout << elem << "\t";
+        }
+        cout << endl;
     }
 }
 
@@ -178,8 +184,7 @@ void Coder::SetARandom(){
         int rn = mod - in;
         int rm = N - im;
         if (rand() % rn < rm)    
-            /* Take it */
-            a[im++] = IntModuloP(mod, in); /* +1 since your range begins from 1 */
+            a[im++] = IntModuloP(mod, in);
     }
 
     assert(im == N);

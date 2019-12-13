@@ -12,8 +12,11 @@ int main(int argc, char const *argv[])
     {
         vec.push_back(IntModuloP(mod, i));
     }
-    
-    auto coder = Coder(K, L, T, vec);
+
+    int seed = atoi(argv[1]);
+    auto coder = Coder(K, L, T, mod, seed);
+    // auto coder = Coder(K, L, T, vec, mod);    
+    // coder.SetMod(mod);
     // auto test_vec = coder.GetA();
 
     // for(auto &elem: test_vec){

@@ -3,16 +3,15 @@
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
+#include <map>
 #include <cassert>
-#include <algorithm>
 
 
-Coder::Coder(int K, int L, int T, vector<IntModuloP> &val_a, int seed) : K(K), L(L), T(T), dg(DegreeTable(K, L, T)), Adegrees(dg.GetAlpha()), Bdegrees(dg.GetBeta())
+Coder::Coder(int K, int L, int T, vector<IntModuloP> &val_a, int prime, int seed) : K(K), L(L), T(T), dg(DegreeTable(K, L, T)), Adegrees(dg.GetAlpha()), Bdegrees(dg.GetBeta())
 {
-    // Adegrees = dg.GetAlpha();
-    // Bdegrees = dg.GetBeta();
-    terms = dg.GetTerms();
-    
+    SetMod(prime);
+    termsSet = dg.GetTerms();
+    terms.assign(termsSet.begin(), termsSet.end());
     
     N = dg.GetTermsSize();
     f.resize(N);
@@ -22,18 +21,14 @@ Coder::Coder(int K, int L, int T, vector<IntModuloP> &val_a, int seed) : K(K), L
     /*
      * Alas, code repetition be again!! Thou have a ::SetA function
      */
-
-    for (int i = 0; i < N; i++)
-    {
-        a[i] = val_a[i];
-    }
+    SetA(val_a);
 }
 
-Coder::Coder(int K, int L, int T, int seed) : K(K), L(L), T(T), dg(DegreeTable(K, L, T)), Adegrees(dg.GetAlpha()), Bdegrees(dg.GetBeta())
+Coder::Coder(int K, int L, int T, int prime, int seed) : K(K), L(L), T(T), dg(DegreeTable(K, L, T)), Adegrees(dg.GetAlpha()), Bdegrees(dg.GetBeta())
 {
-    // Adegrees = dg.GetAlpha();
-    // Bdegrees = dg.GetBeta();
-    terms = dg.GetTerms();
+    SetMod(prime);
+    termsSet = dg.GetTerms();
+    terms.assign(termsSet.begin(), termsSet.end());
     
     
     N = dg.GetTermsSize();
@@ -41,26 +36,11 @@ Coder::Coder(int K, int L, int T, int seed) : K(K), L(L), T(T), dg(DegreeTable(K
     g.resize(N);
     a.resize(N);
 
-    srand(seed);
-    /*
-     * Code repetition!!! The ::SetARandom does the same.
-     */
-    int in, im = 0;
-
-    for (in = 0; in < mod && im < N; ++in) {
-        int rn = mod - in;
-        int rm = N - im;
-        if (rand() % rn < rm)    
-            /* Take it */
-            a[im++] = IntModuloP(mod, in);
-    }
-
-    assert(im == N);
+    SetARandom(seed);
 }
 
 void Coder::Code(Matrix A, Matrix B){
-    mod = A.GetMod();
-    // cout << mod << endl;
+    // mod = A.GetMod();
     const auto [ma, na] = A.GetSize();
     const auto [mb, nb] = B.GetSize();
 
@@ -68,18 +48,17 @@ void Coder::Code(Matrix A, Matrix B){
     {
         throw invalid_argument("matrix dimensions incompatible");
     }
-    vector<int> vec;
-    vec.assign(terms.begin(), terms.end());     // fill vec with values from terms
-    sort(begin(vec), end(vec));
+    // vector<int> vec;
+    // vec.assign(terms.begin(), terms.end());     // fill vec with values from terms
 
     /*
      * NB: V might be uninvertable so we might need to generate vector a again.
      */
-    auto V = Vandermonde(a, vec);
+    auto V = Vandermonde(a, terms);
     auto [IsInv, Rev] = V.Inverse();
     while (not IsInv) {
         SetARandom();
-        V = Vandermonde(a, vec);
+        V = Vandermonde(a, terms);
         tie(IsInv, Rev) = V.Inverse();
     }
     ReverseVdm = Rev;
@@ -143,16 +122,13 @@ void Coder::Code(Matrix A, Matrix B){
             DegMatr[k][l] = temp_matr[k][l];
         }
     }
-/*
-
-    cout << "Degree matrix:\n";
-    for(auto &row : DegMatr){
-        for(auto &elem: row){
-            cout << elem << "\t";
-        }
-        cout << endl;
-    }
-*/
+    // cout << "Degree matrix:\n";
+    // for(auto &row : DegMatr){
+    //     for(auto &elem: row){
+    //         cout << elem << "\t";
+    //     }
+    //     cout << endl;
+    // }
 }
 
 const vector<Matrix> &Coder::GetF() const{
@@ -168,6 +144,8 @@ vector<int> Coder::GetTerms() const{
     vec.assign(terms.begin(), terms.end());     // fill vec with values from terms
     sort(begin(vec), end(vec));
     return vec;
+const vector<int> &Coder::GetTerms() const{
+    return terms;
 }
 
 const vector<IntModuloP> &Coder::GetA() const{
@@ -181,18 +159,41 @@ void Coder::SetA(vector<IntModuloP> &val){
     }
 }
 
-void Coder::SetARandom(){
+void Coder::SetARandom(int seed){
     /*
      * The Knuth algorithm is not optimal for our purpose.
      * Implement The Floyd algorithm!!!
      */
-    int in, im = 0;
+    // int in, im = 0;
+    // srand(seed);
 
-    for (in = 0; in < mod && im < N; ++in) {
-        int rn = mod - in;
-        int rm = N - im;
-        if (rand() % rn < rm)    
-            a[im++] = IntModuloP(mod, in);
+    // for (in = 0; in < mod && im < N; ++in) {
+    //     int rn = mod - in;
+    //     int rm = N - im;
+    //     if (rand() % rn < rm)
+    //         a[im++] = IntModuloP(mod, in);
+    // }
+
+    // cout << im << endl;
+    // assert(im == N);
+
+    map<int, bool> is_used;
+    int in, im;
+
+    im = 0;
+    srand(seed);
+
+    for (in = mod - N; in < mod && im < N; ++in) {
+        int r = rand() % (in + 1); /* generate a random number 'r' */
+
+        if (is_used[r]){
+            /* we already have 'r' */
+            r = in; /* use 'in' instead of the generated number */
+        }
+
+        assert(!is_used[r]);
+        a[im++] = IntModuloP(mod, r);
+        is_used[r] = 1;
     }
 
     assert(im == N);
@@ -202,10 +203,6 @@ const int &Coder::GetN() const{
     return N;
 }
 
-const Matrix& Coder::GetVinv() const {
-    return ReverseVdm;
-}
-
-const vector<vector<int>> &Coder::GetDegMatr() const {
-    return DegMatr;
+void Coder::SetMod(int prime){
+    mod = prime;
 }

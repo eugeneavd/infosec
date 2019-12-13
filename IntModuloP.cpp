@@ -21,7 +21,10 @@ IntModuloP operator/(const IntModuloP &x, const IntModuloP &y) {
 }
 
 IntModuloP operator*(const IntModuloP &x, const IntModuloP &y) {
-    if (x.mod != y.mod) throw std::invalid_argument("Moduli are't equal");
+    if (x.mod != y.mod){
+        // std::cout << x.mod << " " << y.mod << std::endl;
+        throw std::invalid_argument("Moduli are't equal");
+    }
     return IntModuloP(x.mod, x.value * y.value);
 }
 
@@ -44,7 +47,7 @@ IntModuloP operator+(const IntModuloP& x, const IntModuloP& y) {
 
 IntModuloP::IntModuloP(int mod, int value) : mod(mod), value(value) {
     if (mod <= 0 ) {
-        // std::cout << mod << " " << value << std::endl;
+        std::cout << mod << " " << value << std::endl;
         throw std::invalid_argument("Modulus must be positive");
     }
     while (value < 0) value += mod;

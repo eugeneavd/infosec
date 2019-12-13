@@ -257,6 +257,61 @@ const IntModuloP &Matrix::operator()(int m, int n) const {
     return mat[m][n];
 }
 
+void Matrix::SetBlock(int block_num, int parts_num, short direction, const Matrix &block) {
+    if (direction == PART_HORIZONTAL) {
+        // check if (*, n) dimension is appropriate for horizontal partion
+        if (n % parts_num) {
+            throw std::invalid_argument("Can't partition matrix with size (*, "
+                                        + std::to_string(n) + ") into " + std::to_string(parts_num) + " parts.");
+        }
+        // check block number, it starts from 0
+        if (block_num >= parts_num)
+            throw std::invalid_argument(" block_num should be less than number of parts");
+        if (block.m != m)
+            throw std::invalid_argument("Wrong size of the block");
+        int chunk_size = n / parts_num;
+        if (block.n != chunk_size)
+            throw std::invalid_argument("Wrong size of the block");
+        for (int i = 0; i < block.m; i++)
+            for (int j = 0; j < block.n; j++)
+                mat[i][j + block_num * chunk_size] = block.mat[i][j];
+    } else if (direction == PART_VERTICAL)  {
+        // check if (m, *) dimension is appropriate for horizontal partion
+        if (m % parts_num) {
+            throw std::invalid_argument("Can't partition matrix with size ("
+                                        + std::to_string(m) + ", *) into " + std::to_string(parts_num) + " parts.");
+        }
+        // check block number, it starts from 0
+        if (block_num >= parts_num)
+            throw std::invalid_argument(" block_num should be less than number of parts");
+        if (block.n != n)
+            throw std::invalid_argument("Wrong size of the block");
+        const int chunk_size = m / parts_num;
+        if (block.m != chunk_size)
+            throw std::invalid_argument("Wrong size of the block");
+        for (int i = 0; i < block.m; i++)
+            for (int j = 0; j < block.n; j++)
+                mat[i + block_num * chunk_size][j] = block.mat[i][j];
+    } else
+        throw std::invalid_argument("Direction is either PART_HORIZONTAL or PART_VERTICAL");
+}
+
+void Matrix::SetBlock(int v_num, int h_num, int vert_parts, int hor_parts, const Matrix& block) {
+    const auto [mb, nb] = block.GetSize();
+    if (((mb * vert_parts) != m) || ((nb * hor_parts) != n))
+        throw std::invalid_argument("Wrong size of the block");
+    if (v_num >= vert_parts)
+        throw std::invalid_argument("Wrong block vertical index");
+    if (h_num >= hor_parts)
+        throw std::invalid_argument("Wrong block horizontal index");
+
+    const int v_chunk = m / vert_parts;
+    const int h_chunk = n / hor_parts;
+    for (int i = 0; i < mb; i++)
+        for (int j = 0; j < nb; j++)
+            mat[i + v_num*v_chunk][j + h_num*h_chunk] = block(i, j);
+}
+
 Matrix Vandermonde(const std::vector<IntModuloP>& a, const std::vector<int>& deg) {
     const int N = a.size();
     if (N != deg.size()) throw std::invalid_argument("a.size != deg.size");

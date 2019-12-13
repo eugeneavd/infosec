@@ -20,7 +20,7 @@ private:
     set<int> terms {};
     Matrix ReverseVdm;
     vector<vector<int>> DegMatr;
-    
+
 public:
     Coder(int K, int L, int T, vector<IntModuloP> &val_a, int seed = 0);
     Coder(int K, int L, int T, int seed = 0);
@@ -28,9 +28,11 @@ public:
     const vector<Matrix> &GetF() const;
     const vector<Matrix> &GetG() const;
     const int &GetN() const;
-    const set<int> &GetTerms() const;
+    const Matrix& GetVinv() const;
+    vector<int> GetTerms() const;
     const vector<IntModuloP> &GetA() const;
     void SetA(vector<IntModuloP> &val);
+    const vector<vector<int>> &GetDegMatr() const;
     void SetARandom();
 };
 

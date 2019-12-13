@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <cassert>
+#include <algorithm>
 
 
 Coder::Coder(int K, int L, int T, vector<IntModuloP> &val_a, int seed) : K(K), L(L), T(T), dg(DegreeTable(K, L, T)), Adegrees(dg.GetAlpha()), Bdegrees(dg.GetBeta())
@@ -69,6 +70,7 @@ void Coder::Code(Matrix A, Matrix B){
     }
     vector<int> vec;
     vec.assign(terms.begin(), terms.end());     // fill vec with values from terms
+    sort(begin(vec), end(vec));
 
     /*
      * NB: V might be uninvertable so we might need to generate vector a again.
@@ -141,6 +143,8 @@ void Coder::Code(Matrix A, Matrix B){
             DegMatr[k][l] = temp_matr[k][l];
         }
     }
+/*
+
     cout << "Degree matrix:\n";
     for(auto &row : DegMatr){
         for(auto &elem: row){
@@ -148,6 +152,7 @@ void Coder::Code(Matrix A, Matrix B){
         }
         cout << endl;
     }
+*/
 }
 
 const vector<Matrix> &Coder::GetF() const{
@@ -158,8 +163,11 @@ const vector<Matrix> &Coder::GetG() const{
     return g;
 }
 
-const set<int> &Coder::GetTerms() const{
-    return terms;
+vector<int> Coder::GetTerms() const{
+    vector<int> vec;
+    vec.assign(terms.begin(), terms.end());     // fill vec with values from terms
+    sort(begin(vec), end(vec));
+    return vec;
 }
 
 const vector<IntModuloP> &Coder::GetA() const{
@@ -192,4 +200,12 @@ void Coder::SetARandom(){
 
 const int &Coder::GetN() const{
     return N;
+}
+
+const Matrix& Coder::GetVinv() const {
+    return ReverseVdm;
+}
+
+const vector<vector<int>> &Coder::GetDegMatr() const {
+    return DegMatr;
 }

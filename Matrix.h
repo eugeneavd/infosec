@@ -29,6 +29,8 @@ public:
     void Transpose();
     Matrix operator*(IntModuloP a) const;
     Matrix GetBlock(int block_num, int parts_num, short direction) const;
+    void SetBlock(int block_num, int parts_num, short direction, const Matrix& block);
+    void SetBlock(int v_num, int h_num, int vert_num, int hor_num, const Matrix& block);
     int GetMod() const;
     std::pair<int, int> GetSize() const;
     void FillRandomly();

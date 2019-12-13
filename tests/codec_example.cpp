@@ -13,7 +13,7 @@ int main() {
     vector<IntModuloP> a(8);
     for (int i = 0; i < 8; i++)
         a[i] = IntModuloP(prime, i);
-    auto c = Coder(2, 2, 1, a);
+    Coder c(2, 2, 1, a, prime);
 
     auto A = Matrix(2, 2, prime);
     auto B = Matrix(2, 2, prime);
@@ -34,7 +34,7 @@ int main() {
     for (int i = 0; i < N; i++)
         h[i] = f[i] * g[i];
     const auto deg = c.GetTerms();
-    const auto coefs = interpolate(h, c.GetVinv());
+    const auto coefs = interpolate(h, c.GetReverseVdm());
     const auto block2deg = c.GetDegMatr();
     map<int, int> deg2index;
     for (int i=0; i < N; i++)

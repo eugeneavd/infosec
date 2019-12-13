@@ -17,10 +17,14 @@ private:
     vector<IntModuloP> a;
     int N;
     int mod;
-    set<int> terms {};
+    vector<int> terms {};
     Matrix ReverseVdm;
     vector<vector<int>> DegMatr;
-    
+public:
+    const Matrix &GetReverseVdm() const;
+
+    const vector<vector<int>> &GetDegMatr() const;
+
 public:
     Coder(int K, int L, int T, vector<IntModuloP> &val_a, int prime, int seed = 0);
     Coder(int K, int L, int T, int prime, int seed = 0);

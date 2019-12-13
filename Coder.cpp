@@ -10,7 +10,7 @@
 Coder::Coder(int K, int L, int T, vector<IntModuloP> &val_a, int prime, int seed) : K(K), L(L), T(T), dg(DegreeTable(K, L, T)), Adegrees(dg.GetAlpha()), Bdegrees(dg.GetBeta())
 {
     SetMod(prime);
-    termsSet = dg.GetTerms();
+    auto termsSet = dg.GetTerms();
     terms.assign(termsSet.begin(), termsSet.end());
     
     N = dg.GetTermsSize();
@@ -27,7 +27,7 @@ Coder::Coder(int K, int L, int T, vector<IntModuloP> &val_a, int prime, int seed
 Coder::Coder(int K, int L, int T, int prime, int seed) : K(K), L(L), T(T), dg(DegreeTable(K, L, T)), Adegrees(dg.GetAlpha()), Bdegrees(dg.GetBeta())
 {
     SetMod(prime);
-    termsSet = dg.GetTerms();
+    auto termsSet = dg.GetTerms();
     terms.assign(termsSet.begin(), termsSet.end());
     
     
@@ -139,11 +139,6 @@ const vector<Matrix> &Coder::GetG() const{
     return g;
 }
 
-vector<int> Coder::GetTerms() const{
-    vector<int> vec;
-    vec.assign(terms.begin(), terms.end());     // fill vec with values from terms
-    sort(begin(vec), end(vec));
-    return vec;
 const vector<int> &Coder::GetTerms() const{
     return terms;
 }
@@ -160,23 +155,6 @@ void Coder::SetA(vector<IntModuloP> &val){
 }
 
 void Coder::SetARandom(int seed){
-    /*
-     * The Knuth algorithm is not optimal for our purpose.
-     * Implement The Floyd algorithm!!!
-     */
-    // int in, im = 0;
-    // srand(seed);
-
-    // for (in = 0; in < mod && im < N; ++in) {
-    //     int rn = mod - in;
-    //     int rm = N - im;
-    //     if (rand() % rn < rm)
-    //         a[im++] = IntModuloP(mod, in);
-    // }
-
-    // cout << im << endl;
-    // assert(im == N);
-
     map<int, bool> is_used;
     int in, im;
 
@@ -205,4 +183,12 @@ const int &Coder::GetN() const{
 
 void Coder::SetMod(int prime){
     mod = prime;
+}
+
+const Matrix &Coder::GetReverseVdm() const {
+    return ReverseVdm;
+}
+
+const vector<vector<int>> &Coder::GetDegMatr() const {
+    return DegMatr;
 }

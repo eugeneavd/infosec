@@ -36,7 +36,7 @@ public:
     const vector<IntModuloP> &GetA() const;
     void SetA(vector<IntModuloP> &val);
     void SetMod(int prime);
-    void SetARandom(int seed = 0);
+    void SetARandom();
 };
 
 #endif //INFOSEC_CODER_H

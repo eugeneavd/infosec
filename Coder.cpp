@@ -170,12 +170,11 @@ void Coder::SetA(vector<IntModuloP> &val){
     }
 }
 
-void Coder::SetARandom(int seed){
+void Coder::SetARandom(){
     map<int, bool> is_used;
     int in, im;
 
     im = 0;
-    srand(seed);
 
     for (in = mod - N; in < mod && im < N; ++in) {
         int r = rand() % (in + 1); /* generate a random number 'r' */

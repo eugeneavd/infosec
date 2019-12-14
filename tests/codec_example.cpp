@@ -11,18 +11,21 @@ using namespace std;
 
 int main() {
     const auto prime = 73;
-    vector<IntModuloP> a(11);
-    for (int i = 0; i < 11; i++)
-        a[i] = IntModuloP(prime, i);
+    const int K = 2;
+    const int L = 3;
+    const int T = 1;
+    // vector<IntModuloP> a(11);
+    //for (int i = 0; i < 11; i++)
+    //    a[i] = IntModuloP(prime, i);
     //Coder c(2, 3, 1, a, prime);
-    Coder c(2, 3, 1, prime);
+    Coder c(K, L, T, prime);
 
-    auto A = Matrix(6, 2, prime);
-    auto B = Matrix(2, 6, prime);
-    ifstream file;
-    file.open("mat.txt");
-    file >> A;
-    file >> B;
+    const int ma=6, na=2;
+    const int mb=2, nb=6;
+    auto A = Matrix(ma, na, prime);
+    auto B = Matrix(mb, nb, prime);
+    A.FillRandomly();
+    B.FillRandomly();
 
 
     c.Code(A, B);
@@ -38,10 +41,10 @@ int main() {
     map<int, int> deg2index;
     for (int i=0; i < N; i++)
         deg2index[deg[i]] = i;
-    Matrix AB(6, 6, prime);
-    for (int i = 0; i < 2; i++)
-        for (int j = 0; j < 3; j++)
-            AB.SetBlock(i, j, 2, 3, coefs[deg2index[block2deg[i][j]]]);
+    Matrix AB(ma, nb, prime);
+    for (int i = 0; i < K; i++)
+        for (int j = 0; j < L; j++)
+            AB.SetBlock(i, j, K, L, coefs[deg2index[block2deg[i][j]]]);
     if (AB == A*B)
         cout << "Wow, guys! Such a succ.";
     else

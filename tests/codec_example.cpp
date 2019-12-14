@@ -14,7 +14,8 @@ int main() {
     vector<IntModuloP> a(11);
     for (int i = 0; i < 11; i++)
         a[i] = IntModuloP(prime, i);
-    Coder c(2, 3, 1, a, prime);
+    //Coder c(2, 3, 1, a, prime);
+    Coder c(2, 3, 1, prime);
 
     auto A = Matrix(6, 2, prime);
     auto B = Matrix(2, 6, prime);

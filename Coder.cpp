@@ -22,6 +22,19 @@ Coder::Coder(int K, int L, int T, vector<IntModuloP> &val_a, int prime, int seed
      * Alas, code repetition be again!! Thou have a ::SetA function
      */
     SetA(val_a);
+
+    srand(seed);
+    /*
+     * NB: V might be uninvertable so we might need to generate vector a again.
+     */
+    auto V = Vandermonde(a, terms);
+    auto [IsInv, Rev] = V.Inverse();
+    while (not IsInv) {
+        SetARandom();
+        V = Vandermonde(a, terms);
+        tie(IsInv, Rev) = V.Inverse();
+    }
+    ReverseVdm = Rev;
 }
 
 Coder::Coder(int K, int L, int T, int prime, int seed) : K(K), L(L), T(T), dg(DegreeTable(K, L, T)), Adegrees(dg.GetAlpha()), Bdegrees(dg.GetBeta())
@@ -36,7 +49,18 @@ Coder::Coder(int K, int L, int T, int prime, int seed) : K(K), L(L), T(T), dg(De
     g.resize(N);
     a.resize(N);
 
-    SetARandom(seed);
+    srand(seed);
+    /*
+     * NB: V might be uninvertable so we might need to generate vector a again.
+     */
+    auto V = Vandermonde(a, terms);
+    auto [IsInv, Rev] = V.Inverse();
+    while (not IsInv) {
+        SetARandom();
+        V = Vandermonde(a, terms);
+        tie(IsInv, Rev) = V.Inverse();
+    }
+    ReverseVdm = Rev;
 }
 
 void Coder::Code(Matrix A, Matrix B){
@@ -54,17 +78,6 @@ void Coder::Code(Matrix A, Matrix B){
     // vector<int> vec;
     // vec.assign(terms.begin(), terms.end());     // fill vec with values from terms
 
-    /*
-     * NB: V might be uninvertable so we might need to generate vector a again.
-     */
-    auto V = Vandermonde(a, terms);
-    auto [IsInv, Rev] = V.Inverse();
-    while (not IsInv) {
-        SetARandom();
-        V = Vandermonde(a, terms);
-        tie(IsInv, Rev) = V.Inverse();
-    }
-    ReverseVdm = Rev;
 
 
     vector<Matrix> R (T, Matrix(ma/K, na, mod));

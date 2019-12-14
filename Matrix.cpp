@@ -185,8 +185,8 @@ Matrix::Inverse() const {
     IntModuloP __inv(mod, 1);
     //perform direct Gauss elimination and apply same to one
     for (int i = 0; i < N; i++) {
-
 /*
+        std::cout << "huihui\n";
         for (const auto& row: A) {
             for (const auto &elem: row)
                 std::cout << elem << ' ';
@@ -194,6 +194,7 @@ Matrix::Inverse() const {
         }
         std::cout << I;
 */
+
 
         // choose leading element
         if (A[i][i] == zero) {
@@ -227,9 +228,10 @@ Matrix::Inverse() const {
 
     // perform reverse Gauss elimination
     // matrix has only 1s one diagonal
-
+    //std::cout << "extrahui\n";
     for (int i = N - 1; i >= 0; i--) {
 /*
+
         for (const auto& row: A) {
             for (const auto &elem: row)
                 std::cout << elem << ' ';
@@ -237,11 +239,14 @@ Matrix::Inverse() const {
         }
         std::cout << I;
 */
-        for (int j = i - 1; j >= 0; j--)
+
+        for (int j = i - 1; j >= 0; j--) {
+            coef = A[j][i];
             for (int k = 0; k < N; k++) {
-                I.mat[j][k] = I.mat[j][k] - I.mat[i][k] * A[j][i];
+                I.mat[j][k] = I.mat[j][k] - I.mat[i][k] * coef;
                 A[j][k] = A[j][k] - A[i][k] * A[j][i];
             }
+        }
     }
     return std::make_pair(true, I);
 }

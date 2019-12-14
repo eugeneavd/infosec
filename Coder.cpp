@@ -44,6 +44,9 @@ void Coder::Code(Matrix A, Matrix B){
     const auto [ma, na] = A.GetSize();
     const auto [mb, nb] = B.GetSize();
 
+    if (a.size() != N)
+        throw invalid_argument("evaluation vector supplied has wrong number of points");
+
     if (na != mb)
     {
         throw invalid_argument("matrix dimensions incompatible");

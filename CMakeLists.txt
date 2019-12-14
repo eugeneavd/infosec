@@ -19,6 +19,7 @@ add_executable(coder_test tests/coder_test.cpp Coder.cpp)     #
 add_executable(horner_test tests/horner_test.cpp)
 
 target_link_libraries(myserver matrix intmodp)
+target_link_libraries(intmodp_test matrix intmodp)
 target_link_libraries(block_matrix_test matrix intmodp)
 target_link_libraries(coder_test coder matrix intmodp dg)
 target_link_libraries(myclient matrix intmodp)

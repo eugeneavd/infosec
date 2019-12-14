@@ -39,8 +39,11 @@ void DegreeTable::GASPbig() {
             beta[i] = K * L + t - 1;
         }
     }
+    //don't swap, it's for proof's convenience
+    /*
     if (K < L)
         alpha.swap(beta);
+    */
 
     // construct degree table
     // explicit construction of degree table is only for debug purposes
@@ -78,8 +81,12 @@ void DegreeTable::GASPsmall() {
             beta[i] = K * L + t - 1;
         }
     }
+    //don't swap, it's for proof's convenience
+
+/*
     if (K < L)
-        alpha.swap(beta);
+       alpha.swap(beta);
+*/
 
     // construct degree table
     // explicit construction of degree table is only for debug purposes

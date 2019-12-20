@@ -9,6 +9,7 @@
 #include <string.h>
 #include <vector>
 #include <unistd.h>
+#include <csignal>
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <sys/types.h>

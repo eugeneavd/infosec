@@ -9,6 +9,7 @@
 void func(int sockfd){
     int buff[MAX];
     int size[4];
+    int prime;
 
     for (int i = 0; i < 4; i++)		//accept matrix sizes
     {
@@ -20,10 +21,23 @@ void func(int sockfd){
     {
         throw std::runtime_error("matrix dimensions incompatible");
     }
-    auto A = Matrix(size[0], size[1], PRIME, sockfd);
-    auto B = Matrix(size[2], size[3], PRIME, sockfd);
+
+    bzero(buff, MAX);
+    read(sockfd, buff, sizeof(buff));
+    prime = buff[0];
+
+    auto A = Matrix(size[0], size[1], prime, sockfd);
+    auto B = Matrix(size[2], size[3], prime, sockfd);
     auto C = A * B;
     C.Send(sockfd);
+}
+
+void signalHandler(int signum){
+    std::cout << "\nInterrupt signal (" << signum << ") received.\n";
+    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    // close(conn)
+    close(sockfd);
+    exit(signum);
 }
 
 int main()
@@ -85,13 +99,17 @@ int main()
         std::cout << "Error: " << ex.what();
     }
     std::cout << "Server acccepts the data from client" << std::endl;
-
-    try{
-        // Function for chatting between client and server
-        func(connfd);
-    }
-    catch (std::exception& ex){
-        std::cout << "Error: " << ex.what();
+    
+    signal(SIGINT, signalHandler);
+    while(1){
+        try{
+            // Function for chatting between client and server
+            // std::cout << sockfd << " " << connfd << std::endl;
+            func(connfd);
+        }
+        catch (std::exception& ex){
+            std::cout << "Error: " << ex.what();
+        }
     }
     // After chatting close the socket
     close(sockfd);

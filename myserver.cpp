@@ -10,7 +10,7 @@ void func(int sockfd){
     int buff[MAX];
     int size[4];
     int prime;
-    prime = PRIME;
+    // prime = PRIME;
 
     for (int i = 0; i < 4; i++)		//accept matrix sizes
     {
@@ -23,9 +23,9 @@ void func(int sockfd){
         throw std::runtime_error("matrix dimensions incompatible");
     }
 
-    // bzero(buff, MAX);
-    // read(sockfd, buff, sizeof(buff));
-    // prime = buff[0];
+    bzero(buff, MAX);
+    read(sockfd, buff, sizeof(buff));
+    prime = buff[0];
 
     auto A = Matrix(size[0], size[1], prime, sockfd);
     auto B = Matrix(size[2], size[3], prime, sockfd);

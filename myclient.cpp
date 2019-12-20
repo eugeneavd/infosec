@@ -10,7 +10,8 @@ void func(int sockfd)
     int n = 0;
     int size[4];
     int prime;
-    prime = PRIME;
+    // prime = PRIME;
+
     std::cout << "Enter matrix dimensions" <<  std::endl;
     while(n != 4)
     {
@@ -28,10 +29,10 @@ void func(int sockfd)
         throw std::runtime_error("matrix dimensions incompatible");
     }
     
-    // std::cout << "Enter modulo" <<  std::endl;
-    // std::cin >> prime;
-    // buff[0] = prime;
-    // write(sockfd, buff, sizeof(buff));
+    std::cout << "Enter modulo" <<  std::endl;
+    std::cin >> prime;
+    buff[0] = prime;
+    write(sockfd, buff, sizeof(buff));
 
     std::cout << "Enter first matrix:" << std::endl;
     Matrix A {size[0], size[1], prime};

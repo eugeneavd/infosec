@@ -28,7 +28,7 @@ public:
 public:
     Coder(int K, int L, int T, vector<IntModuloP> &val_a, int prime, int seed = 0);
     Coder(int K, int L, int T, int prime, int seed = 0);
-    void Code(Matrix A, Matrix B);
+    void Code(const Matrix& A, const Matrix& B);
     const vector<Matrix> &GetF() const;
     const vector<Matrix> &GetG() const;
     const int &GetN() const;

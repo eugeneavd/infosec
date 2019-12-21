@@ -1,7 +1,3 @@
-//
-// Created by endoveg on 06.12.2019.
-//
-
 #include "Decoder.h"
 
 std::vector<Matrix> interpolate(const std::vector<Matrix> &h, const Matrix &invV) {

@@ -89,7 +89,6 @@ void DegreeTable::GASPsmall() {
 */
 
     // construct degree table
-    // explicit construction of degree table is only for debug purposes
     const int m = alpha.size();
     const int n = beta.size();
     a_outer_b = vector<vector<int>>(m, vector<int>(n));

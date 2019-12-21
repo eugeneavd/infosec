@@ -18,11 +18,6 @@ std::ostream& operator<<(std::ostream& out, const Matrix& A) {
 }
 
 std::istream& operator>>(std::istream& in, Matrix& A) {
-    /*
-     matrix size is determined during creation
-    in >> A.m >> A.n;
-    A.resize(A.m, A.n);
-     */
     for (auto& row: A.mat)
         for (auto& elem: row)
             in >> elem;
@@ -185,16 +180,6 @@ Matrix::Inverse() const {
     IntModuloP __inv(mod, 1);
     //perform direct Gauss elimination and apply same to one
     for (int i = 0; i < N; i++) {
-/*
-        std::cout << "huihui\n";
-        for (const auto& row: A) {
-            for (const auto &elem: row)
-                std::cout << elem << ' ';
-            std::cout << std::endl;
-        }
-        std::cout << I;
-*/
-
 
         // choose leading element
         if (A[i][i] == zero) {
@@ -228,17 +213,7 @@ Matrix::Inverse() const {
 
     // perform reverse Gauss elimination
     // matrix has only 1s one diagonal
-    //std::cout << "extrahui\n";
     for (int i = N - 1; i >= 0; i--) {
-/*
-
-        for (const auto& row: A) {
-            for (const auto &elem: row)
-                std::cout << elem << ' ';
-            std::cout << std::endl;
-        }
-        std::cout << I;
-*/
 
         for (int j = i - 1; j >= 0; j--) {
             coef = A[j][i];

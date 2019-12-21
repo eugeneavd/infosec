@@ -1,7 +1,3 @@
-//
-// Created by endoveg on 06.12.2019.
-//
-
 #ifndef INFOSEC_DECODER_H
 #define INFOSEC_DECODER_H
 

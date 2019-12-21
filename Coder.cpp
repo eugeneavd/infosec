@@ -18,15 +18,10 @@ Coder::Coder(int K, int L, int T, vector<IntModuloP> &val_a, int prime, int seed
     g.resize(N);
     a.resize(N);
 
-    /*
-     * Alas, code repetition be again!! Thou have a ::SetA function
-     */
     SetA(val_a);
 
     srand(seed);
-    /*
-     * NB: V might be uninvertable so we might need to generate vector a again.
-     */
+
     auto V = Vandermonde(a, terms);
     auto [IsInv, Rev] = V.Inverse();
     while (not IsInv) {
@@ -50,9 +45,7 @@ Coder::Coder(int K, int L, int T, int prime, int seed) : K(K), L(L), T(T), dg(De
     a.resize(N);
 
     srand(seed);
-    /*
-     * NB: V might be uninvertable so we might need to generate vector a again.
-     */
+
     auto V = Vandermonde(a, terms);
     auto [IsInv, Rev] = V.Inverse();
     while (not IsInv) {
@@ -63,8 +56,7 @@ Coder::Coder(int K, int L, int T, int prime, int seed) : K(K), L(L), T(T), dg(De
     ReverseVdm = Rev;
 }
 
-void Coder::Code(Matrix A, Matrix B){
-    // mod = A.GetMod();
+void Coder::Code(const Matrix& A, const Matrix& B){
     const auto [ma, na] = A.GetSize();
     const auto [mb, nb] = B.GetSize();
 
@@ -75,36 +67,28 @@ void Coder::Code(Matrix A, Matrix B){
     {
         throw invalid_argument("matrix dimensions incompatible");
     }
-    // vector<int> vec;
-    // vec.assign(terms.begin(), terms.end());     // fill vec with values from terms
-
 
 
     vector<Matrix> R (T, Matrix(ma/K, na, mod));
     vector<Matrix> S (T, Matrix(mb, nb/L, mod));
     for(auto& elem : R){
         elem.FillRandomly();
-        // cout << elem << endl;
     }
     for(auto& elem : S){
         elem.FillRandomly();
-        // cout << elem << endl;
     }
 
     for(int i = 0; i < N; i++){
         auto temp = R[T - 1];
-        // cout << a[i] << endl;
         for (int k = K + T - 2; k > -1; k--)
         {
             if (k > K - 1)
             {
                 temp = R[k-K] + temp * (a[i]^(Adegrees[k+1] - Adegrees[k]));
-                // cout << temp << endl;
             }
             else
             {
                 temp = A.GetBlock(k, K, PART_VERTICAL) + temp * (a[i]^(Adegrees[k+1] - Adegrees[k]));
-                // cout << temp << endl;
             }
             
         }
@@ -138,13 +122,6 @@ void Coder::Code(Matrix A, Matrix B){
             DegMatr[k][l] = temp_matr[k][l];
         }
     }
-    // cout << "Degree matrix:\n";
-    // for(auto &row : DegMatr){
-    //     for(auto &elem: row){
-    //         cout << elem << "\t";
-    //     }
-    //     cout << endl;
-    // }
 }
 
 const vector<Matrix> &Coder::GetF() const{
@@ -171,6 +148,7 @@ void Coder::SetA(vector<IntModuloP> &val){
 }
 
 void Coder::SetARandom(){
+    // Floyd's algorithm for generation of a vector of unique numbers.
     map<int, bool> is_used;
     int in, im;
 

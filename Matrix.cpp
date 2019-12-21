@@ -219,7 +219,7 @@ Matrix::Inverse() const {
             coef = A[j][i];
             for (int k = 0; k < N; k++) {
                 I.mat[j][k] = I.mat[j][k] - I.mat[i][k] * coef;
-                A[j][k] = A[j][k] - A[i][k] * A[j][i];
+                A[j][k] = A[j][k] - A[i][k] * coef;
             }
         }
     }
